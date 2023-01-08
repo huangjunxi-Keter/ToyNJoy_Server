@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using ToyNJoy.Entity.Model;
 
-namespace ToyNJoy.Entity.Model;
+namespace ToyNJoy.Entity;
 
 public partial class ToyNjoyContext : DbContext
 {
