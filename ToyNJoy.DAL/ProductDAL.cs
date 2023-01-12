@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Utiliy;
 
 namespace ToyNJoy.DAL
 {
@@ -30,9 +27,16 @@ namespace ToyNJoy.DAL
             return db.SaveChanges() > 0;
         }
 
-        public IEnumerable<Product> find()
+        public IEnumerable<Product> find(string? name, string? orderby, int? count)
         {
-            return db.Products.ToList();
+            IEnumerable<Product> result = db.Products;
+            if (!string.IsNullOrEmpty(name))
+                result = result.Where(x => x.Name.IndexOf(name) > -1);
+            if (!string.IsNullOrEmpty(orderby))
+                result = result.OrderByDescending(x => BaseUtiliy.GetPropertyValue(x, orderby));
+            if (count != null)
+                result = result.Take(count.Value);
+            return result;
         }
     }
 }

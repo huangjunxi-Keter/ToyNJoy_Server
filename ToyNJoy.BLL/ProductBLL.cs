@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ToyNJoy.DAL;
+﻿using ToyNJoy.DAL;
 using ToyNJoy.Entity.Model;
 
 namespace ToyNJoy.BLL
@@ -24,8 +19,8 @@ namespace ToyNJoy.BLL
             return dal.upd(p);
         }
 
-        public IEnumerable<Product> find() {
-            return dal.find();
+        public IEnumerable<Product> find(string? name, string? order, int? count) {
+            return dal.find(name, order, count);
         }
     }
 }

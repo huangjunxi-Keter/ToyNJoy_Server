@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ToyNJoy.Utiliy\ToyNJoy.Utiliy.csproj" />
+  </ItemGroup>
+
 </Project>
