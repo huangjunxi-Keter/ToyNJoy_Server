@@ -8,14 +8,20 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(ILogger<WeatherForecastController> logger)
+        public ProductController(ILogger<ProductController> logger)
         {
             _logger = logger;
         }
 
         private ProductBLL bll = new ProductBLL();
+
+        [HttpGet("get")]
+        public Product getById(int id) 
+        {
+            return bll.getById(id);
+        }
 
         [HttpGet("find")]
         public IEnumerable<Product> find(string? name, string? orderby, int? count)

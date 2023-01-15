@@ -8,9 +8,9 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class NewsController : Controller
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<NewsController> _logger;
 
-        public NewsController(ILogger<WeatherForecastController> logger)
+        public NewsController(ILogger<NewsController> logger)
         {
             _logger = logger;
         }

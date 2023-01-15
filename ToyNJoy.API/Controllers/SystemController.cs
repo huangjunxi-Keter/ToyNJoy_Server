@@ -7,9 +7,9 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class SystemController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<SystemController> _logger;
 
-        public SystemController(ILogger<WeatherForecastController> logger)
+        public SystemController(ILogger<SystemController> logger)
         {
             _logger = logger;
         }

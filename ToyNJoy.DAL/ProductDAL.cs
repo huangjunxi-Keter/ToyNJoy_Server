@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ToyNJoy.Entity;
+﻿using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
 using ToyNJoy.Utiliy;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToyNJoy.DAL
 {
@@ -25,6 +25,11 @@ namespace ToyNJoy.DAL
         {
             db.Update(p);
             return db.SaveChanges() > 0;
+        }
+
+        public Product getById(int id) 
+        {
+            return db.Find<Product>(id);
         }
 
         public IEnumerable<Product> find(string? name, string? orderby, int? count)
