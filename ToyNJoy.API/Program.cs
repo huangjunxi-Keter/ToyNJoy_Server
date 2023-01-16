@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using ToyNJoy.Utiliy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +12,23 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// 注入自定义工具类 builder.Configuration = appsettings.json
+builder.Services.AddSingleton(new TokenHelper(builder.Configuration, new JwtSecurityTokenHandler()));
+
+// 添加jwt验证：
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JwtSettings:ValidIssuer"],//发布者
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JwtSettings:ValidAudience"],//接收者（可以不设置，在生成Token时再指定）
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:IssuerSigninKey"]))
+    };
+});
 
 var app = builder.Build();
 
@@ -18,7 +41,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();// 在前 鉴权
+app.UseAuthorization();// 在后  授权
 
 app.MapControllers();
 

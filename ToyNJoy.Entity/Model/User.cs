@@ -5,21 +5,21 @@ namespace ToyNJoy.Entity.Model;
 
 public partial class User
 {
-    public string Username { get; set; } = null!;
+    public string? Username { get; set; }
 
-    public string Password { get; set; } = null!;
+    public string? Password { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
-    public string Nickname { get; set; } = null!;
+    public string? Nickname { get; set; }
 
-    public int Lv { get; set; }
+    public int? Lv { get; set; }
 
-    public string VirtualImage { get; set; } = null!;
+    public string? VirtualImage { get; set; }
 
-    public DateTime RegisterTime { get; set; }
+    public DateTime? RegisterTime { get; set; }
 
-    public int State { get; set; }
+    public int? State { get; set; }
 
     public virtual ICollection<Friend> FriendFriendNameNavigations { get; } = new List<Friend>();
 
