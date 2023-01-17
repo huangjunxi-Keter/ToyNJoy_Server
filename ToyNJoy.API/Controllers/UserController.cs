@@ -22,6 +22,11 @@ namespace ToyNJoy.API.Controllers
 
         private UserBLL bll = new UserBLL();
 
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost("login")] //不写这个(HttpXXXX) Swagger 会报错
         [AllowAnonymous] //开放接口，不用认证
         public IActionResult Login([FromBody] User user)
@@ -48,6 +53,43 @@ namespace ToyNJoy.API.Controllers
                 result = Ok(new ResponseModel { Code = 1, Data = userData });
             }
             return result;
+        }
+
+        /// <summary>
+        /// 需要token，返回用户头像
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("userImage")]
+        [Authorize]
+        public IActionResult GetUserImage()
+        {
+            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
+            User loginUser = _tokenHelper.GetToken<User>(token);
+            string imageName = string.Empty;
+            if (loginUser != null) 
+            {
+                imageName = loginUser.VirtualImage;
+            }
+            var (fileContentes, contentType) = BaseUtiliy.GetImageInfo(imageName, 0);
+            return new FileContentResult(fileContentes, contentType);
+        }
+
+        /// <summary>
+        /// 需要token，返回用户头像名称
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("userImageName")]
+        [Authorize]
+        public string GetUserImageName()
+        {
+            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
+            User loginUser = _tokenHelper.GetToken<User>(token);
+            string imageName = string.Empty;
+            if (loginUser != null) 
+            {
+                imageName = loginUser.VirtualImage;
+            }
+            return imageName;
         }
     }
 }

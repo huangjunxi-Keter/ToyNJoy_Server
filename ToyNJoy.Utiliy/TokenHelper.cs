@@ -74,7 +74,20 @@ namespace ToyNJoy.Utiliy
                 PropertyInfo propertyInfo = type.GetProperty(item.Type);
                 if (propertyInfo != null && propertyInfo.CanRead)
                 {
-                    propertyInfo.SetValue(objA, item.Value, null);
+                    var propertyType = propertyInfo.PropertyType;
+
+                    if (propertyType == typeof(string))
+                    {
+                        propertyInfo.SetValue(objA, item.Value, null);
+                    }
+                    else if (propertyType == typeof(DateTime))
+                    {
+                        propertyInfo.SetValue(objA, Convert.ToDateTime(item.Value), null);
+                    }
+                    else if (propertyType == typeof(int))
+                    {
+                        propertyInfo.SetValue(objA, Convert.ToInt32(item.Value), null);
+                    }
                 }
             }
             return (T)objA;
