@@ -12,7 +12,7 @@ namespace ToyNJoy.Utiliy
             return propertyInfo.GetValue(obj, null);
         }
 
-        public static (byte[] fileContents, string contentType) GetImageInfo(string? name, int width = 0) 
+        public static (byte[] fileContents, string contentType) GetImageInfo(string? name, int width = 0)
         {
             byte[] fileContents;
             string contentType;
@@ -53,13 +53,21 @@ namespace ToyNJoy.Utiliy
             // 原图
             if (width <= 0)
             {
-                using (var sw = new FileStream(imgPath, FileMode.Open))
+                try
                 {
-                    var bytes = new byte[sw.Length];
-                    sw.Read(bytes, 0, bytes.Length);
-                    sw.Close();
+                    using (var sw = new FileStream(imgPath, FileMode.Open))
+                    {
+                        var bytes = new byte[sw.Length];
+                        sw.Read(bytes, 0, bytes.Length);
+                        sw.Close();
 
-                    fileContents = bytes;
+                        fileContents = bytes;
+                    }
+                }
+                catch(IOException e) 
+                {
+                    Console.WriteLine(e.ToString());
+                    return (new byte[0], contentType);
                 }
             }
             else
@@ -86,6 +94,7 @@ namespace ToyNJoy.Utiliy
                     fileContents = bytes;
                 }
             }
+
             return (fileContents, contentType);
         }
     }

@@ -91,5 +91,69 @@ namespace ToyNJoy.API.Controllers
             }
             return imageName;
         }
+
+        /// <summary>
+        /// 获取当前登录的用户详情
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get")]
+        [Authorize]
+        public User get()
+        {
+            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
+            User user = _tokenHelper.GetToken<User>(token);
+            User result = bll.getByName(user.Username);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取用户详情
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getByName")]
+        [Authorize]
+        public User getByName(string Name)
+        {
+            return bll.getByName(Name);
+        }
+
+
+        /// <summary>
+        /// 更新头像
+        /// </summary>
+        /// <param name="virtualImage">FromData</param>
+        /// <returns></returns>
+        [HttpPost("updateVirtual")]
+        [Authorize]
+        public bool updateVirtual([FromForm] IFormCollection virtualImage)
+        {
+            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
+            User user = _tokenHelper.GetToken<User>(token);
+            user = bll.getByName(user.Username);
+
+            FormFileCollection fileCollection = (FormFileCollection)virtualImage.Files;
+            foreach (IFormFile file in fileCollection)
+            {
+                // 组成新名字
+                string imageType = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+                string imageName = user.Username + "_virtual" + imageType;
+
+                string filename = AppContext.BaseDirectory.Split("\\bin\\")[0] + "/Image/user/" + imageName;
+                if (System.IO.File.Exists(filename))
+                {
+                    System.IO.File.Delete(filename);
+                }
+                using (FileStream fs = System.IO.File.Create(filename))
+                {
+                    // 复制文件
+                    file.CopyTo(fs);
+                    // 清空缓冲区数据
+                    fs.Flush();
+                }
+                user.VirtualImage = imageName;
+            }
+
+            return bll.upd(user);
+        }
     }
 }

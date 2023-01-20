@@ -12,5 +12,15 @@ namespace ToyNJoy.BLL
         {
             return dal.Login(userName, password);
         }
+
+        public User getByName(string userName) 
+        {
+            return dal.getByName(userName);
+        }
+
+        public bool upd(User user)
+        {
+            return dal.upd(user);
+        }
     }
 }
