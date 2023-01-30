@@ -21,6 +21,7 @@ namespace ToyNJoy.API.Controllers
         }
 
         private UserBLL bll = new UserBLL();
+        private UserInfoBLL infoBll = new UserInfoBLL();
 
         /// <summary>
         /// 登录
@@ -53,6 +54,18 @@ namespace ToyNJoy.API.Controllers
                 result = Ok(new ResponseModel { Code = 1, Data = userData });
             }
             return result;
+        }
+
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost("add")]
+        [AllowAnonymous]
+        public string add([FromBody]User user)
+        {
+            return bll.add(user);   
         }
 
         /// <summary>
@@ -93,7 +106,7 @@ namespace ToyNJoy.API.Controllers
         }
 
         /// <summary>
-        /// 获取当前登录的用户详情
+        /// 获取当前登录的用户【基本信息】
         /// </summary>
         /// <returns></returns>
         [HttpGet("get")]
@@ -107,7 +120,7 @@ namespace ToyNJoy.API.Controllers
         }
 
         /// <summary>
-        /// 获取用户详情
+        /// 获取指定用户的【基本信息】
         /// </summary>
         /// <returns></returns>
         [HttpGet("getByName")]
@@ -117,6 +130,30 @@ namespace ToyNJoy.API.Controllers
             return bll.getByName(Name);
         }
 
+        /// <summary>
+        /// 获取当前登录的用户【详情】
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getInfo")]
+        [Authorize]
+        public UserInfo getInfo()
+        {
+            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
+            User user = _tokenHelper.GetToken<User>(token);
+            UserInfo result = infoBll.getByName(user.Username);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取指定用户的【详情】
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getInfoByName")]
+        [Authorize]
+        public UserInfo getInfoByName(string Name)
+        {
+            return infoBll.getByName(Name);
+        }
 
         /// <summary>
         /// 更新头像
@@ -154,6 +191,30 @@ namespace ToyNJoy.API.Controllers
             }
 
             return bll.upd(user);
+        }
+
+        /// <summary>
+        /// 修改用户基本信息
+        /// </summary>
+        /// <param name="userData">基本信息</param>
+        /// <returns></returns>
+        [HttpPost("upd")]
+        [Authorize]
+        public bool upd([FromBody] User userData)
+        {
+            return bll.upd(userData);
+        }
+
+        /// <summary>
+        /// 修改用户详情
+        /// </summary>
+        /// <param name="userInfo">用户详情</param>
+        /// <returns></returns>
+        [HttpPost("updInfo")]
+        [Authorize]
+        public bool updInfo([FromBody] UserInfo userInfo)
+        {
+            return infoBll.upd(userInfo);
         }
     }
 }

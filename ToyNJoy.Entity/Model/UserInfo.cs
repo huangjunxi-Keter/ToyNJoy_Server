@@ -5,13 +5,13 @@ namespace ToyNJoy.Entity.Model;
 
 public partial class UserInfo
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
-    public string UserName { get; set; } = null!;
+    public string? UserName { get; set; }
 
-    public string Signature { get; set; } = null!;
+    public string? Signature { get; set; }
 
-    public string WrapperImage { get; set; } = null!;
+    public string? WrapperImage { get; set; }
 
     public string? Gender { get; set; }
 
@@ -23,5 +23,5 @@ public partial class UserInfo
 
     public string? Phone { get; set; }
 
-    public virtual User UserNameNavigation { get; set; } = null!;
+    public virtual User? UserNameNavigation { get; set; }
 }

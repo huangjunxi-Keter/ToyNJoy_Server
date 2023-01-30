@@ -17,5 +17,11 @@ namespace ToyNJoy.DAL
             db.Update(userInfo);
             return db.SaveChanges() > 0;
         }
+
+        public bool add(UserInfo userInfo)
+        {
+            db.UserInfos.Add(userInfo);
+            return db.SaveChanges() > 0;
+        }
     }
 }

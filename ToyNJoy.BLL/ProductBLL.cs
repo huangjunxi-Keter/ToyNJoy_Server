@@ -24,8 +24,13 @@ namespace ToyNJoy.BLL
             return dal.getById(id);
         }
 
-        public IEnumerable<Product> find(string? name, string? order, int? count) {
-            return dal.find(name, order, count);
+        public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
+            int? typeId, string? orderby, int? page, int? count) {
+            return dal.find(name, maxPrice, minPrice, typeId, orderby, page, count);
+        }
+        
+        public int count(string? name, string? order) {
+            return dal.count(name, order);
         }
     }
 }

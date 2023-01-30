@@ -29,7 +29,7 @@ public partial class Product
 
     public int Purchases { get; set; }
 
-    public virtual ICollection<Library> Libraries { get; } = new List<Library>();
+    // public virtual ICollection<Library> Libraries { get; } = new List<Library>();
 
     public virtual ICollection<ProductHardwareRequirement> ProductHardwareRequirements { get; } = new List<ProductHardwareRequirement>();
 
@@ -39,5 +39,5 @@ public partial class Product
 
     public virtual ProductType Type { get; set; } = null!;
 
-    public virtual ICollection<WishList> WishLists { get; } = new List<WishList>();
+    // public virtual ICollection<WishList> WishLists { get; } = new List<WishList>();
 }

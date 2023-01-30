@@ -13,6 +13,7 @@ namespace ToyNJoy.API.Controllers
         {
             _logger = logger;
         }
+
         /// <summary>
         /// 请求图片
         /// </summary>
@@ -24,6 +25,16 @@ namespace ToyNJoy.API.Controllers
         {
             var (fileContentes, contentType) = BaseUtiliy.GetImageInfo(name, width);
             FileContentResult result = new FileContentResult(fileContentes, contentType);
+            return result;
+        }
+
+        [HttpGet("getVerificationCode")]
+        public string EmailValidation(string email)
+        {
+            string result = "";
+            string vc = BaseUtiliy.GenerateVerificationCode();
+            if (EmailHelper.SendMail(email, "注册ToyNJoy", "您的验证码为：" + vc))
+                result = vc;
             return result;
         }
     }

@@ -147,10 +147,10 @@ public partial class ToyNjoyContext : DbContext
                 .HasForeignKey(d => d.GroupId)
                 .HasConstraintName("FK_Library_Library_Group_id");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.Libraries)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_library_product_id");
+            //entity.HasOne(d => d.Product).WithMany(p => p.Libraries)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_library_product_id");
 
             entity.HasOne(d => d.UserNameNavigation).WithMany(p => p.Libraries)
                 .HasForeignKey(d => d.UserName)
@@ -427,10 +427,10 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("user_name");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.WishLists)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Wish_List_product_id");
+            //entity.HasOne(d => d.Product).WithMany(p => p.WishLists)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Wish_List_product_id");
 
             entity.HasOne(d => d.UserNameNavigation).WithMany(p => p.WishLists)
                 .HasForeignKey(d => d.UserName)

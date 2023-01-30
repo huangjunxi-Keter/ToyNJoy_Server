@@ -19,21 +19,28 @@ namespace ToyNJoy.API.Controllers
         private ProductBLL bll = new ProductBLL();
 
         [HttpGet("get")]
-        public Product getById(int id) 
+        public Product getById(int id)
         {
             return bll.getById(id);
         }
 
         [HttpGet("find")]
-        public IEnumerable<Product> find(string? name, string? orderby, int? count)
+        public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
+            int? typeId, string? orderby, int? page, int? count)
         {
-            return bll.find(name, orderby, count);
+            return bll.find(name, maxPrice, minPrice, typeId, orderby, page, count);
         }
-        
+
+        [HttpGet("count")]
+        public int count(string? name, string? orderby)
+        {
+            return bll.count(name, orderby);
+        }
+
         [HttpPost("add")]
         public IEnumerable<Product> add([FromBody] Product p)
         {
-            return bll.find(null, null, 4);
+            return null;
         }
     }
 }

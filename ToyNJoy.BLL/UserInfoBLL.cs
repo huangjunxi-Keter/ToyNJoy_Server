@@ -17,5 +17,10 @@ namespace ToyNJoy.BLL
         {
             return dal.upd(userInfo);
         }
+
+        public bool add(UserInfo userInfo) 
+        {
+            return dal.add(userInfo);
+        }
     }
 }
