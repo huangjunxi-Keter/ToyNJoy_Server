@@ -35,7 +35,7 @@ public partial class Product
 
     public virtual ICollection<ProductPhotoGallery> ProductPhotoGalleries { get; } = new List<ProductPhotoGallery>();
 
-    public virtual ICollection<ShoppingCar> ShoppingCars { get; } = new List<ShoppingCar>();
+    // public virtual ICollection<ShoppingCar> ShoppingCars { get; } = new List<ShoppingCar>();
 
     public virtual ProductType Type { get; set; } = null!;
 

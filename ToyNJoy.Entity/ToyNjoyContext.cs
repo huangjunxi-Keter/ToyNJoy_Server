@@ -338,10 +338,10 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("user_name");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCars)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Shopping_Car_product_name");
+            //entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCars)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Shopping_Car_product_name");
 
             entity.HasOne(d => d.UserNameNavigation).WithMany(p => p.ShoppingCars)
                 .HasForeignKey(d => d.UserName)
