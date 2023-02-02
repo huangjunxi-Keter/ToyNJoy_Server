@@ -114,5 +114,16 @@ namespace ToyNJoy.Utiliy
             }
             return VerificationCode;
         }
+
+        public static string GenerateOrderId() 
+        {
+            Random rd = new Random();
+            string result = "";
+            result += DateTime.Now.ToString("yyyyMMddHHmm");
+            result += rd.Next(10, 99).ToString();
+            result += DateTime.Now.ToString("mm");
+            result += rd.Next(100, 999).ToString();
+            return result;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ToyNJoy.DAL;
+using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
 
 
@@ -6,21 +7,28 @@ namespace ToyNJoy.BLL
 {
     public class UserInfoBLL
     {
-        private UserInfoDAL dal = new UserInfoDAL();
+        private UserInfoDAL userInfoDAL;
+        private ToyNjoyContext context;
+
+        public UserInfoBLL(ToyNjoyContext context)
+        {
+            this.context = context;
+            userInfoDAL = new UserInfoDAL(context);
+        }
 
         public UserInfo getByName(string userName) 
         {
-            return dal.getByName(userName);
+            return userInfoDAL.getByName(userName);
         }
 
         public bool upd(UserInfo userInfo)
         {
-            return dal.upd(userInfo);
+            return userInfoDAL.upd(userInfo);
         }
 
         public bool add(UserInfo userInfo) 
         {
-            return dal.add(userInfo);
+            return userInfoDAL.add(userInfo);
         }
     }
 }

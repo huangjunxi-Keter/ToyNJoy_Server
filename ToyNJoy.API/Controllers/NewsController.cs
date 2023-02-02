@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Entity;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -8,14 +9,14 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class NewsController : Controller
     {
-        private readonly ILogger<NewsController> _logger;
+        private readonly ILogger<NewsController> logger;
+        private NewsBLL bll;
 
-        public NewsController(ILogger<NewsController> logger)
+        public NewsController(ILogger<NewsController> logger, ToyNjoyContext context)
         {
-            _logger = logger;
+            this.logger = logger;
+            bll = new NewsBLL(context);
         }
-
-        private NewsBLL bll = new NewsBLL();
 
         [HttpGet("find")]
         public IEnumerable<News> find(string? title, string? text, int? prodoctId, string? orderby, int? count) 

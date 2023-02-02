@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Entity;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -8,14 +9,14 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class ProductPhotoGalleryController : ControllerBase
     {
-        private readonly ILogger<ProductPhotoGalleryController> _logger;
+        private readonly ILogger<ProductPhotoGalleryController> logger;
+        private ProductPhotoGalleryBLL bll;
 
-        public ProductPhotoGalleryController(ILogger<ProductPhotoGalleryController> logger)
+        public ProductPhotoGalleryController(ILogger<ProductPhotoGalleryController> logger, ToyNjoyContext context)
         {
-            _logger = logger;
+            this.logger = logger;
+            bll = new ProductPhotoGalleryBLL(context);
         }
-
-        private ProductPhotoGalleryBLL bll = new ProductPhotoGalleryBLL();
 
         [HttpGet("getByProductId")]
         public IEnumerable<ProductPhotoGallery> getByProductId(int id)

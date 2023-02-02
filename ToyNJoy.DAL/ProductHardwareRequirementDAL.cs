@@ -5,11 +5,16 @@ namespace ToyNJoy.DAL
 {
     public class ProductHardwareRequirementDAL
     {
-        private ToyNjoyContext db = new ToyNjoyContext();
+        private ToyNjoyContext context;
+
+        public ProductHardwareRequirementDAL(ToyNjoyContext context)
+        {
+            this.context = context;
+        }
 
         public ProductHardwareRequirement getByProductId(int id) 
         {
-            return db.ProductHardwareRequirements.First(p => p.ProductId == id);
+            return context.ProductHardwareRequirements.First(p => p.ProductId == id);
         }
     }
 }

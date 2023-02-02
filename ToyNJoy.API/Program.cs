@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using ToyNJoy.Entity;
 using ToyNJoy.Utiliy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// 注入数据库上下文
+builder.Services.AddDbContext<ToyNjoyContext>();
 
 // 注入自定义工具类 builder.Configuration = appsettings.json
 builder.Services.AddSingleton(new TokenHelper(builder.Configuration, new JwtSecurityTokenHandler()));

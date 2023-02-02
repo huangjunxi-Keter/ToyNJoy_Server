@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
-using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Entity;
 using ToyNJoy.Utiliy;
 
 namespace ToyNJoy.API.Controllers
@@ -11,17 +11,18 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        private readonly ILogger<UserController> _logger;
-        private readonly TokenHelper _tokenHelper;
+        private readonly ILogger<UserController> logger;
+        private UserBLL bll;
+        private UserInfoBLL infoBll;
+        private TokenHelper tokenHelper;
 
-        public UserController(ILogger<UserController> logger, TokenHelper tokenHelper)
+        public UserController(ILogger<UserController> logger, ToyNjoyContext context, TokenHelper tokenHelper)
         {
-            _logger = logger;
-            _tokenHelper = tokenHelper;
+            this.logger = logger;
+            bll = new UserBLL(context);
+            infoBll = new UserInfoBLL(context);
+            this.tokenHelper = tokenHelper;
         }
-
-        private UserBLL bll = new UserBLL();
-        private UserInfoBLL infoBll = new UserInfoBLL();
 
         /// <summary>
         /// 登录
@@ -48,7 +49,7 @@ namespace ToyNJoy.API.Controllers
             }
             else
             {
-                var token = _tokenHelper.CreateJwtToken(userData);
+                var token = tokenHelper.CreateJwtToken(userData);
                 Response.Headers["Token"] = token;
                 Response.Headers["Access-Control-Expose-Headers"] = "token";
                 result = Ok(new ResponseModel { Code = 1, Data = userData });
@@ -77,7 +78,7 @@ namespace ToyNJoy.API.Controllers
         public IActionResult GetUserImage()
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = _tokenHelper.GetToken<User>(token);
+            User loginUser = tokenHelper.GetToken<User>(token);
             string imageName = string.Empty;
             if (loginUser != null) 
             {
@@ -96,7 +97,7 @@ namespace ToyNJoy.API.Controllers
         public string GetUserImageName()
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = _tokenHelper.GetToken<User>(token);
+            User loginUser = tokenHelper.GetToken<User>(token);
             string imageName = string.Empty;
             if (loginUser != null) 
             {
@@ -114,8 +115,8 @@ namespace ToyNJoy.API.Controllers
         public User get()
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = _tokenHelper.GetToken<User>(token);
-            User result = bll.getByName(user.Username);
+            User user = tokenHelper.GetToken<User>(token);
+            User result = bll.get(user.Username);
             return result;
         }
 
@@ -127,7 +128,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public User getByName(string Name)
         {
-            return bll.getByName(Name);
+            return bll.get(Name);
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace ToyNJoy.API.Controllers
         public UserInfo getInfo()
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = _tokenHelper.GetToken<User>(token);
+            User user = tokenHelper.GetToken<User>(token);
             UserInfo result = infoBll.getByName(user.Username);
             return result;
         }
@@ -165,8 +166,8 @@ namespace ToyNJoy.API.Controllers
         public bool updateVirtual([FromForm] IFormCollection virtualImage)
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = _tokenHelper.GetToken<User>(token);
-            user = bll.getByName(user.Username);
+            User user = tokenHelper.GetToken<User>(token);
+            user = bll.get(user.Username);
 
             FormFileCollection fileCollection = (FormFileCollection)virtualImage.Files;
             foreach (IFormFile file in fileCollection)

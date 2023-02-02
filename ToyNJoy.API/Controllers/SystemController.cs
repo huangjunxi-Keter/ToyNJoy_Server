@@ -7,11 +7,11 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class SystemController : ControllerBase
     {
-        private readonly ILogger<SystemController> _logger;
+        private readonly ILogger<SystemController> logger;
 
         public SystemController(ILogger<SystemController> logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
 
         /// <summary>

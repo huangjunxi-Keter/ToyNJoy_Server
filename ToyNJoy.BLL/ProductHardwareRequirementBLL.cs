@@ -6,11 +6,18 @@ namespace ToyNJoy.BLL
 {
     public class ProductHardwareRequirementBLL
     {
-        private ProductHardwareRequirementDAL dal = new ProductHardwareRequirementDAL();
+        private ProductHardwareRequirementDAL productHardwareRequirementDAL;
+        private ToyNjoyContext context;
+
+        public ProductHardwareRequirementBLL(ToyNjoyContext context)
+        {
+            this.context = context;
+            productHardwareRequirementDAL = new ProductHardwareRequirementDAL(context);
+        }
 
         public ProductHardwareRequirement getByProductId(int id)
         { 
-            return dal.getByProductId(id);
+            return productHardwareRequirementDAL.getByProductId(id);
         }
     }
 }

@@ -6,35 +6,40 @@ namespace ToyNJoy.DAL
 {
     public class ProductDAL
     {
-        private ToyNjoyContext db = new ToyNjoyContext();
+        private ToyNjoyContext context;
+
+        public ProductDAL(ToyNjoyContext context)
+        {
+            this.context = context;
+        }
 
         public bool add(Product p)
         {
-            db.Add(p);
-            return db.SaveChanges() > 0;
+            context.Add(p);
+            return context.SaveChanges() > 0;
         }
 
         public bool del(string id)
         {
-            db.Remove(id);
-            return db.SaveChanges() > 0;
+            context.Remove(id);
+            return context.SaveChanges() > 0;
         }
 
         public bool upd(Product p)
         {
-            db.Update(p);
-            return db.SaveChanges() > 0;
+            context.Update(p);
+            return context.SaveChanges() > 0;
         }
 
         public Product getById(int id) 
         {
-            return db.Find<Product>(id);
+            return context.Find<Product>(id);
         }
 
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
             int? typeId, string? orderby, int? page, int? count)
         {
-            IEnumerable<Product> result = db.Products;
+            IQueryable<Product> result = context.Products;
             if (!string.IsNullOrEmpty(name))
                 result = result.Where(x => x.Name.Contains(name));
             if (maxPrice != null)
@@ -45,7 +50,29 @@ namespace ToyNJoy.DAL
                 result = result.Where(x => x.TypeId == typeId);
             // 条件筛选完后再进行排序和分页
             if (!string.IsNullOrEmpty(orderby))
-                result = result.OrderByDescending(x => BaseUtiliy.GetPropertyValue(x, orderby));
+            {
+                switch (orderby)
+                {
+                    case "Name":
+                        result = result.OrderByDescending(x => x.Name);
+                        break;
+                    case "Price":
+                        result = result.OrderByDescending(x => x.Price);
+                        break;
+                    case "ReleaseDate":
+                        result = result.OrderByDescending(x => x.ReleaseDate);
+                        break;
+                    case "Browse":
+                        result = result.OrderByDescending(x => x.Browse);
+                        break;
+                    case "Purchases":
+                        result = result.OrderByDescending(x => x.Purchases);
+                        break;
+                    case "Discount":
+                        result = result.OrderByDescending(x => x.Discount);
+                        break;
+                }
+            }
             if (page != null && count != null)
                 result = result.Skip((page * count).Value);
             if (count != null)
@@ -55,11 +82,33 @@ namespace ToyNJoy.DAL
 
         public int count(string? name, string? orderby)
         {
-            IEnumerable<Product> result = db.Products;
+            IQueryable<Product> result = context.Products;
             if (!string.IsNullOrEmpty(name))
                 result = result.Where(x => x.Name.IndexOf(name) > -1);
             if (!string.IsNullOrEmpty(orderby))
-                result = result.OrderByDescending(x => BaseUtiliy.GetPropertyValue(x, orderby));
+            {
+                switch (orderby)
+                {
+                    case "Name":
+                        result = result.OrderByDescending(x => x.Name);
+                        break;
+                    case "Price":
+                        result = result.OrderByDescending(x => x.Price);
+                        break;
+                    case "ReleaseDate":
+                        result = result.OrderByDescending(x => x.ReleaseDate);
+                        break;
+                    case "Browse":
+                        result = result.OrderByDescending(x => x.Browse);
+                        break;
+                    case "Purchases":
+                        result = result.OrderByDescending(x => x.Purchases);
+                        break;
+                    case "Discount":
+                        result = result.OrderByDescending(x => x.Discount);
+                        break;
+                }
+            }
             return result.Count();
         }
     }

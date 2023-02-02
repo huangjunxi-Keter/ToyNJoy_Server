@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
-using ToyNJoy.Utiliy;
+using ToyNJoy.Entity;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -10,16 +9,14 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class ProductTypeController : Controller
     {
-        private readonly ILogger<ProductTypeController> _logger;
-        private readonly TokenHelper _tokenHelper;
+        private readonly ILogger<ProductTypeController> logger;
+        private ProductTypeBLL bll;
 
-        public ProductTypeController(ILogger<ProductTypeController> logger, TokenHelper tokenHelper)
+        public ProductTypeController(ILogger<ProductTypeController> logger, ToyNjoyContext context)
         {
-            _logger = logger;
-            _tokenHelper = tokenHelper;
+            this.logger = logger;
+            bll = new ProductTypeBLL(context);
         }
-
-        private ProductTypeBLL bll = new ProductTypeBLL();
 
         [HttpGet("find")]
         public IEnumerable<ProductType> find() 

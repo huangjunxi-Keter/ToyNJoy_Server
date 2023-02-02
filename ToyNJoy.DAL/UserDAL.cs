@@ -6,38 +6,42 @@ namespace ToyNJoy.DAL
 {
     public class UserDAL
     {
-        private ToyNjoyContext db = new ToyNjoyContext();
-        //private UserInfoDAL userInfoDAL = new UserInfoDAL();
+        private ToyNjoyContext context;
+
+        public UserDAL(ToyNjoyContext context)
+        {
+            this.context = context;
+        }
 
         public User Login(string userName, string passwor) 
         {
-            return db.Users.Where(u => u.Username.Equals(userName) && u.Password.Equals(passwor)).FirstOrDefault();
+            return context.Users.Where(u => u.Username.Equals(userName) && u.Password.Equals(passwor)).FirstOrDefault();
         }
 
-        public User getByName(string userName) 
+        public User get(string userName) 
         {
-            return db.Users.Find(userName);
+            return context.Users.Find(userName);
         }
 
         public bool upd(User user)
         {
-            db.Update(user);
-            return db.SaveChanges() > 0;
+            context.Update(user);
+            return context.SaveChanges() > 0;
         }
 
         public bool add(User user, UserInfo userInfo) 
         {
             bool result = false;
-            using (IDbContextTransaction dbContextTransaction = db.Database.BeginTransaction()) 
+            using (IDbContextTransaction dbContextTransaction = context.Database.BeginTransaction()) 
             {
                 try
                 {
-                    db.Users.Add(user);
-                    db.SaveChanges();
+                    context.Users.Add(user);
+                    context.SaveChanges();
 
-                    db.UserInfos.Add(userInfo);
+                    context.UserInfos.Add(userInfo);
 
-                    result = db.SaveChanges() > 0;
+                    result = context.SaveChanges() > 0;
 
                     dbContextTransaction.Commit();
                 }

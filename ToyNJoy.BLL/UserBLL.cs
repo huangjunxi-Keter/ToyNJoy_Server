@@ -1,4 +1,5 @@
 ﻿using ToyNJoy.DAL;
+using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
 
 
@@ -6,28 +7,35 @@ namespace ToyNJoy.BLL
 {
     public class UserBLL
     {
-        private UserDAL dal = new UserDAL();
+        private UserDAL userDAL;
+        private ToyNjoyContext context;
+
+        public UserBLL(ToyNjoyContext context)
+        {
+            this.context = context;
+            userDAL = new UserDAL(context);
+        }
 
         public User Login(string userName, string password)
         {
-            return dal.Login(userName, password);
+            return userDAL.Login(userName, password);
         }
 
-        public User getByName(string userName) 
+        public User get(string userName) 
         {
-            return dal.getByName(userName);
+            return userDAL.get(userName);
         }
 
         public bool upd(User user)
         {
-            return dal.upd(user);
+            return userDAL.upd(user);
         }
 
         public string add(User user)
         {
             string result = "添加失败！";
 
-            User userDB = dal.getByName(user.Username);
+            User userDB = userDAL.get(user.Username);
             if (userDB == null)
             {
                 user.Nickname = user.Username;
@@ -42,7 +50,7 @@ namespace ToyNJoy.BLL
                 Random r = new Random();
                 userInfo.WrapperImage = string.Format("ToyNJoy({0}).jpg", r.Next(1, 4));
 
-                if (dal.add(user, userInfo))
+                if (userDAL.add(user, userInfo))
                     result = "注册成功！";
             }
             else

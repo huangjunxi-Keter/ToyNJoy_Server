@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ToyNJoy.Entity.Model;
 
-public partial class WishList
+public partial class OrderItem
 {
     /// <summary>
     /// 主键
@@ -11,9 +11,9 @@ public partial class WishList
     public int Id { get; set; }
 
     /// <summary>
-    /// 用户名
+    /// 订单id
     /// </summary>
-    public string UserName { get; set; } = null!;
+    public string OrderId { get; set; } = null!;
 
     /// <summary>
     /// 商品id
@@ -21,16 +21,11 @@ public partial class WishList
     public int ProductId { get; set; }
 
     /// <summary>
-    /// 排序顺序
+    /// 价格（根据商品价格和折扣计算）
     /// </summary>
-    public int SerialNamber { get; set; }
+    public double Price { get; set; }
 
-    /// <summary>
-    /// 添加时间
-    /// </summary>
-    public DateTime JoinDate { get; set; }
+    public virtual Order Order { get; set; } = null!;
 
     public virtual Product Product { get; set; } = null!;
-
-    public virtual User UserNameNavigation { get; set; } = null!;
 }

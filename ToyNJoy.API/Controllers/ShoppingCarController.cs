@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Entity;
 using ToyNJoy.Utiliy;
 
 namespace ToyNJoy.API.Controllers
@@ -10,23 +11,23 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class ShoppingCarController : Controller
     {
-        private readonly ILogger<ShoppingCarController> _logger;
-        private readonly TokenHelper _tokenHelper;
+        private readonly ILogger<ShoppingCarController> logger;
+        private ShoppingCarBLL bll;
+        private TokenHelper tokenHelper;
 
-        public ShoppingCarController(ILogger<ShoppingCarController> logger, TokenHelper tokenHelper)
+        public ShoppingCarController(ILogger<ShoppingCarController> logger, ToyNjoyContext context, TokenHelper tokenHelper)
         {
-            _logger = logger;
-            _tokenHelper = tokenHelper;
+            this.logger = logger;
+            bll = new ShoppingCarBLL(context);
+            this.tokenHelper = tokenHelper;
         }
-
-        private ShoppingCarBLL bll = new ShoppingCarBLL();
 
         [HttpGet("find")]
         [Authorize]
         public IEnumerable<ShoppingCar> find(double? beginDays, double? endDays) 
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = _tokenHelper.GetToken<User>(token);
+            User loginUser = tokenHelper.GetToken<User>(token);
             return bll.find(loginUser.Username);
         }
     }

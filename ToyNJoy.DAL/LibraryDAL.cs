@@ -6,11 +6,16 @@ namespace ToyNJoy.DAL
 {
     public class LibraryDAL
     {
-        private ToyNjoyContext db = new ToyNjoyContext();
+        private ToyNjoyContext context;
 
-        public IEnumerable<Library> find(string? username, double? beginDays, double? endDays)
+        public LibraryDAL(ToyNjoyContext context)
         {
-            IEnumerable<Library> result = db.Libraries.Include(x => x.Product);
+            this.context = context;
+        }
+
+        public IEnumerable<Library> find(string? username, double? beginDays, double? endDays, string? orderby)
+        {
+            IQueryable<Library> result = context.Libraries;
             if (string.IsNullOrEmpty(username))
                 result = result.Where(x => x.UserName.Equals(username));
             if (beginDays != null)
@@ -23,7 +28,40 @@ namespace ToyNJoy.DAL
                 DateTime endDate = DateTime.Now.AddDays(endDays.Value);
                 result = result.Where(x => x.LastTime < endDate);
             }
-            return result;
+            if (string.IsNullOrEmpty(orderby))
+            {
+                switch (orderby)
+                {
+                    case "JoinTime":
+                        result = result.OrderByDescending(x => x.JoinTime);
+                        break;
+                    case "LastTime":
+                        result = result.OrderByDescending(x => x.LastTime);
+                        break;
+                    case "TotalHours":
+                        result = result.OrderByDescending(x => x.TotalHours);
+                        break;
+                    case "Name":
+                        result = result.OrderByDescending(x => x.Product.Name);
+                        break;
+                }
+            }
+            return result.Include(x => x.Product);
+        }
+
+        public IEnumerable<Library> find(string username)
+        {
+            return context.Libraries.Where(l => l.UserName.Equals(username)).Include(x => x.Product);
+        }
+
+        public bool add(List<Library> libraries)
+        {
+            foreach (Library library in libraries)
+            {
+                context.Libraries.Add(library);
+            }
+
+            return context.SaveChanges() >= libraries.Count();
         }
     }
 }

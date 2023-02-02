@@ -1,3 +1,16 @@
-- 简介
-	- 实体类生成：
-	Scaffold-DbContext "Data Source=localhost;Initial Catalog=ToyNJoy;User ID=sa;Password=sa;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Model
+# 璁板綍
+
+- EFCore
+  - 鐢熸垚妯″瀷
+
+     ``` bash
+     Scaffold-DbContext "Data Source=localhost;Initial Catalog=ToyNJoy;User ID=sa;Password=sa;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;" 
+     Microsoft.EntityFrameworkCore.SqlServer -OutputDir Model
+     ```
+
+  - 鏇存柊妯″瀷
+
+     ``` bash
+     Scaffold-DbContext "Data Source=localhost;Initial Catalog=ToyNJoy;User ID=sa;Password=sa;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;" 
+     Microsoft.EntityFrameworkCore.SqlServer -OutputDir Model -Force
+     ```

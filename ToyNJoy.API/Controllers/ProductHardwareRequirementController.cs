@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Entity;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -8,14 +9,14 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class ProductHardwareRequirementController : ControllerBase
     {
-        private readonly ILogger<ProductHardwareRequirementController> _logger;
+        private readonly ILogger<ProductHardwareRequirementController> logger;
+        private ProductHardwareRequirementBLL bll;
 
-        public ProductHardwareRequirementController(ILogger<ProductHardwareRequirementController> logger)
+        public ProductHardwareRequirementController(ILogger<ProductHardwareRequirementController> logger, ToyNjoyContext context)
         {
-            _logger = logger;
+            this.logger = logger;
+            bll = new ProductHardwareRequirementBLL(context);
         }
-
-        private ProductHardwareRequirementBLL bll = new ProductHardwareRequirementBLL();
 
         [HttpGet("getByProductId")]
         public ProductHardwareRequirement getByProductId(int id)

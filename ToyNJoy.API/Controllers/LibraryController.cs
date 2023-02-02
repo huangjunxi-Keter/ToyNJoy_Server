@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ToyNJoy.BLL;
+using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.BLL;
 using ToyNJoy.Utiliy;
 
 namespace ToyNJoy.API.Controllers
@@ -10,24 +11,34 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class LibraryController : Controller
     {
-        private readonly ILogger<LibraryController> _logger;
-        private readonly TokenHelper _tokenHelper;
+        private readonly ILogger<LibraryController> logger;
+        private LibraryBLL bll;
+        private TokenHelper tokenHelper;
 
-        public LibraryController(ILogger<LibraryController> logger, TokenHelper tokenHelper)
+        public LibraryController(ILogger<LibraryController> logger, ToyNjoyContext contex, TokenHelper tokenHelper)
         {
-            _logger = logger;
-            _tokenHelper = tokenHelper;
+            this.logger = logger;
+            bll = new LibraryBLL(contex);
+            this.tokenHelper = tokenHelper;
         }
-
-        private LibraryBLL bll = new LibraryBLL();
 
         [HttpGet("find")]
         [Authorize]
-        public IEnumerable<Library> find(double? beginDays, double? endDays) 
+        public IEnumerable<Library> find(double? beginDays, double? endDays, string? orderby) 
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = _tokenHelper.GetToken<User>(token);
-            return bll.find(loginUser.Username, beginDays, endDays);
+            User loginUser = tokenHelper.GetToken<User>(token);
+            return bll.find(loginUser.Username, beginDays, endDays, orderby);
+        }
+
+        [HttpGet("post")]
+        [Authorize]
+        public bool add([FromBody] Order order)
+        {
+            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
+            User loginUser = tokenHelper.GetToken<User>(token);
+
+            return bll.add(order.Id, loginUser.Username);
         }
     }
 }

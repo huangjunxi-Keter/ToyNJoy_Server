@@ -5,11 +5,16 @@ namespace ToyNJoy.DAL
 {
     public class ProductPhotoGalleryDAL
     {
-        private ToyNjoyContext db = new ToyNjoyContext();
+        private ToyNjoyContext context;
+
+        public ProductPhotoGalleryDAL(ToyNjoyContext context)
+        {
+            this.context = context;
+        }
 
         public IEnumerable<ProductPhotoGallery> getByProductId(int id) 
         {
-            return db.ProductPhotoGalleries.Where(g => g.ProductId == id);
+            return context.ProductPhotoGalleries.Where(g => g.ProductId == id);
         }
     }
 }

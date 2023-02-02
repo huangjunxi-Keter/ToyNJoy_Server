@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
+using ToyNJoy.Entity;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -9,14 +9,14 @@ namespace ToyNJoy.API.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly ILogger<ProductController> _logger;
+        private readonly ILogger<ProductController> logger;
+        private ProductBLL bll;
 
-        public ProductController(ILogger<ProductController> logger)
+        public ProductController(ILogger<ProductController> logger, ToyNjoyContext context)
         {
-            _logger = logger;
+            this.logger = logger;
+            bll = new ProductBLL(context);
         }
-
-        private ProductBLL bll = new ProductBLL();
 
         [HttpGet("get")]
         public Product getById(int id)
@@ -28,7 +28,8 @@ namespace ToyNJoy.API.Controllers
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
             int? typeId, string? orderby, int? page, int? count)
         {
-            return bll.find(name, maxPrice, minPrice, typeId, orderby, page, count);
+            var data = bll.find(name, maxPrice, minPrice, typeId, orderby, page, count);
+            return data;
         }
 
         [HttpGet("count")]
@@ -38,9 +39,9 @@ namespace ToyNJoy.API.Controllers
         }
 
         [HttpPost("add")]
-        public IEnumerable<Product> add([FromBody] Product p)
+        public bool add([FromBody] Product p)
         {
-            return null;
+            return bll.add(p);
         }
     }
 }

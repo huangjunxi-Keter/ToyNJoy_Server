@@ -1,36 +1,45 @@
 ﻿using ToyNJoy.DAL;
+using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
 
 namespace ToyNJoy.BLL
 {
     public class ProductBLL
     {
-        private ProductDAL dal = new ProductDAL();
+        private ProductDAL productDAL;
+        private ToyNjoyContext context;
 
-        public bool add(Product p) { 
-            return dal.add(p);
+        public ProductBLL(ToyNjoyContext context)
+        {
+            this.context = context;
+            productDAL = new ProductDAL(context);
+        }
+
+        public bool add(Product p) {
+            p.Discount = 1;
+            return productDAL.add(p);
         }
 
         public bool del(String id) {
-            return dal.del(id);
+            return productDAL.del(id);
         }
 
         public bool upd(Product p) {
-            return dal.upd(p);
+            return productDAL.upd(p);
         }
 
         public Product getById(int id)
         {
-            return dal.getById(id);
+            return productDAL.getById(id);
         }
 
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
             int? typeId, string? orderby, int? page, int? count) {
-            return dal.find(name, maxPrice, minPrice, typeId, orderby, page, count);
+            return productDAL.find(name, maxPrice, minPrice, typeId, orderby, page, count);
         }
         
         public int count(string? name, string? order) {
-            return dal.count(name, order);
+            return productDAL.count(name, order);
         }
     }
 }
