@@ -300,6 +300,10 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("用户名")
                 .HasColumnName("username");
+            entity.Property(e => e.AlipayData)
+                .IsUnicode(false)
+                .HasComment("支付宝回调参数")
+                .HasColumnName("alipay_data");
 
             entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.Username)

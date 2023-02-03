@@ -30,6 +30,9 @@ public partial class Order
     /// </summary>
     public DateTime? CreateDate { get; set; }
 
+
+    public string? AlipayData { get; set; }
+
     // public virtual ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
 
     public virtual User? UsernameNavigation { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
 using ToyNJoy.DAL;
 using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
@@ -11,6 +12,7 @@ namespace ToyNJoy.BLL
         private OrderItemDAL orderItemDAL;
         private OrderDAL orderDAL;
         private ShoppingCarDAL shoppingCarDAL;
+        private WishListDAL wishListDAL;
         private ToyNjoyContext context;
 
         public LibraryBLL(ToyNjoyContext context)
@@ -20,6 +22,7 @@ namespace ToyNJoy.BLL
             orderItemDAL = new OrderItemDAL(context);
             orderDAL = new OrderDAL(context);
             shoppingCarDAL = new ShoppingCarDAL(context);
+            wishListDAL = new WishListDAL(context);
         }
 
         public IEnumerable<Library> find(string? username, double? beginDays, double? endDays, string? orderby)
@@ -27,14 +30,15 @@ namespace ToyNJoy.BLL
             return libraryDAL.find(username, beginDays, endDays, orderby);
         }
 
-        public bool add(string orderId, string userName)
+        public bool add(Alipay alipay, string userName)
         {
             bool result = false;
 
-            Order order = orderDAL.get(orderId);
+            Order order = orderDAL.get(alipay.out_trade_no);
             order.State = 1;
+            order.AlipayData = JsonConvert.SerializeObject(alipay);
 
-            IEnumerable<OrderItem> orderItems = orderItemDAL.find(orderId);
+            IEnumerable<OrderItem> orderItems = orderItemDAL.find(alipay.out_trade_no);
             List<Library> libraries = new List<Library>();
             foreach (OrderItem orderItem in orderItems)
             {
@@ -54,6 +58,7 @@ namespace ToyNJoy.BLL
                     libraryDAL.add(libraries);
                     orderDAL.upd(order);
                     shoppingCarDAL.del(userName);
+                    wishListDAL.del(userName, orderItems);
                     dbContextTransaction.Commit();
 
                     result = true;

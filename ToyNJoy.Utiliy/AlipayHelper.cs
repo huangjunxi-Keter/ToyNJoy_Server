@@ -75,7 +75,7 @@ namespace ToyNJoy.Utiliy
             AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
 
             // 设置同步回调地址
-            payRequest.SetReturnUrl("http://localhost:8080/#/PayCallback/" + OutTradeNo);
+            payRequest.SetReturnUrl("http://localhost:8080/#/PayCallback");
 
             // 设置异步通知接收地址
             // payRequest.SetNotifyUrl("");?

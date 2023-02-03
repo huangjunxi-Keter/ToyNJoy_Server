@@ -59,5 +59,13 @@ namespace ToyNJoy.DAL
 
             return result.Include(w => w.Product);
         }
+
+        public bool del(string userName, IEnumerable<OrderItem> orderItems)
+        {
+            context.WishLists
+                .Where(w => w.UserName.Equals(userName) && orderItems.Any(o => w.ProductId == o.ProductId))
+                .ExecuteDelete();
+            return context.SaveChanges() >= orderItems.Count();
+        }
     }
 }

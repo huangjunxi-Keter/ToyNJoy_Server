@@ -31,14 +31,14 @@ namespace ToyNJoy.API.Controllers
             return bll.find(loginUser.Username, beginDays, endDays, orderby);
         }
 
-        [HttpGet("post")]
+        [HttpPost("add")]
         [Authorize]
-        public bool add([FromBody] Order order)
+        public bool add([FromBody] Alipay alipay)
         {
             string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
             User loginUser = tokenHelper.GetToken<User>(token);
 
-            return bll.add(order.Id, loginUser.Username);
+            return bll.add(alipay, loginUser.Username);
         }
     }
 }
