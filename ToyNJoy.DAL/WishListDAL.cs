@@ -13,7 +13,7 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public IEnumerable<WishList> find(string? userName, string? orderBy, string productName, int? productTypeId, int? productMinPrice, int? productMaxPrice)
+        public IEnumerable<WishList> find(string? userName, string? orderBy, string productName, int? productId, int? productTypeId, int? productMinPrice, int? productMaxPrice)
         {
             IQueryable<WishList> result = context.WishLists;
             if (!string.IsNullOrEmpty(userName))
@@ -22,6 +22,8 @@ namespace ToyNJoy.DAL
                 result = result.Where(w => w.Product.Name.Contains(productName));
             if (productTypeId != null)
                 result = result.Where(w => w.Product.TypeId == productTypeId);
+            if (productId != null)
+                result = result.Where(w => w.Product.Id == productId);
             if (productMinPrice != null)
                 result = result.Where(w => w.Product.Price >= productMinPrice);
             if (productMaxPrice != null)

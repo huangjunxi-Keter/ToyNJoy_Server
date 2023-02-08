@@ -77,8 +77,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public IActionResult GetUserImage()
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
             string imageName = string.Empty;
             if (loginUser != null) 
             {
@@ -96,8 +95,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public string GetUserImageName()
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
             string imageName = string.Empty;
             if (loginUser != null) 
             {
@@ -114,9 +112,8 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public User get()
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = tokenHelper.GetToken<User>(token);
-            User result = bll.get(user.Username);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User result = bll.get(loginUser.Username);
             return result;
         }
 
@@ -139,9 +136,8 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public UserInfo getInfo()
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = tokenHelper.GetToken<User>(token);
-            UserInfo result = infoBll.getByName(user.Username);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            UserInfo result = infoBll.getByName(loginUser.Username);
             return result;
         }
 
@@ -165,8 +161,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public bool updateVirtual([FromForm] IFormCollection virtualImage)
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = tokenHelper.GetToken<User>(token);
+            User user = BaseUtiliy.getLoginUser(Request, tokenHelper);
             user = bll.get(user.Username);
 
             FormFileCollection fileCollection = (FormFileCollection)virtualImage.Files;

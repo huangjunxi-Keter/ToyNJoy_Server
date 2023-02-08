@@ -24,20 +24,17 @@ namespace ToyNJoy.API.Controllers
 
         [HttpGet("find")]
         [Authorize]
-        public IEnumerable<Library> find(double? beginDays, double? endDays, string? orderby) 
+        public IEnumerable<Library> find(string? name, int? productId, int? typeId, double? beginDays, double? endDays, string? orderby) 
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
-            return bll.find(loginUser.Username, beginDays, endDays, orderby);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            return bll.find(loginUser.Username, name, productId, typeId, beginDays, endDays, orderby);
         }
 
         [HttpPost("add")]
         [Authorize]
         public bool add([FromBody] Alipay alipay)
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
-
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
             return bll.add(alipay, loginUser.Username);
         }
     }

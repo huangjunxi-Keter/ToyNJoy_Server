@@ -30,7 +30,7 @@ namespace ToyNJoy.BLL
         {
             string result = null;
 
-            IEnumerable<ShoppingCar> shoppingCar = shoppingCarDAL.find(username);
+            IEnumerable<ShoppingCar> shoppingCar = shoppingCarDAL.find(username, null);
 
             Order order = new Order();
             order.Id = BaseUtiliy.GenerateOrderId();

@@ -24,11 +24,25 @@ namespace ToyNJoy.API.Controllers
 
         [HttpGet("find")]
         [Authorize]
-        public IEnumerable<ShoppingCar> find(double? beginDays, double? endDays) 
+        public IEnumerable<ShoppingCar> find(int? productId) 
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
-            return bll.find(loginUser.Username);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            return bll.find(loginUser.Username, productId);
+        }
+
+        [HttpGet("add")]
+        [Authorize]
+        public bool add(int productId)
+        {
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            return bll.add(loginUser.Username, productId);
+        }
+
+        [HttpGet("del")]
+        [Authorize]
+        public bool del(int id)
+        {
+            return bll.del(id);
         }
     }
 }

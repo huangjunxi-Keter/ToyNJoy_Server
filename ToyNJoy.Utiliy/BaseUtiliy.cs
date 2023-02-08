@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using Microsoft.AspNetCore.Http;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
+using ToyNJoy.Entity.Model;
 
 namespace ToyNJoy.Utiliy
 {
@@ -124,6 +126,14 @@ namespace ToyNJoy.Utiliy
             result += DateTime.Now.ToString("mm");
             result += rd.Next(100, 999).ToString();
             return result;
+        }
+
+
+        public static User getLoginUser(HttpRequest request, TokenHelper tokenHelper)
+        {
+            string token = request.Headers["Authorization"].ToString().Split(' ')[1];
+            User loginUser = tokenHelper.GetToken<User>(token);
+            return loginUser;
         }
     }
 }

@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ToyNJoy.BLL\ToyNJoy.BLL.csproj" />
     <ProjectReference Include="..\ToyNJoy.Entity\ToyNJoy.Entity.csproj" />
+    <ProjectReference Include="..\ToyNJoy.Utiliy\ToyNJoy.Utiliy.csproj" />
   </ItemGroup>
 
 </Project>

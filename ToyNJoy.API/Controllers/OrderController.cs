@@ -30,9 +30,8 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public string add() 
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User user = tokenHelper.GetToken<User>(token);
-            return bll.add(user.Username);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            return bll.add(loginUser.Username);
         }
     }
 }

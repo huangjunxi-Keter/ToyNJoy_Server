@@ -13,11 +13,18 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public IEnumerable<Library> find(string? username, double? beginDays, double? endDays, string? orderby)
+        public IEnumerable<Library> find(string? userName, string productName, int? productId, 
+            int? productTypeId, double? beginDays, double? endDays, string? orderby)
         {
             IQueryable<Library> result = context.Libraries;
-            if (string.IsNullOrEmpty(username))
-                result = result.Where(x => x.UserName.Equals(username));
+            if (!string.IsNullOrEmpty(userName))
+                result = result.Where(x => x.UserName.Equals(userName));
+            if (!string.IsNullOrEmpty(productName))
+                result = result.Where(x => x.Product.Name.Contains(productName));
+            if (productId != null)
+                result = result.Where(x => x.Product.Id == productId);
+            if (productTypeId != null)
+                result = result.Where(x => x.Product.TypeId == productTypeId);
             if (beginDays != null)
             {
                 DateTime beginDate = DateTime.Now.AddDays(beginDays.Value);
@@ -28,7 +35,7 @@ namespace ToyNJoy.DAL
                 DateTime endDate = DateTime.Now.AddDays(endDays.Value);
                 result = result.Where(x => x.LastTime < endDate);
             }
-            if (string.IsNullOrEmpty(orderby))
+            if (!string.IsNullOrEmpty(orderby))
             {
                 switch (orderby)
                 {

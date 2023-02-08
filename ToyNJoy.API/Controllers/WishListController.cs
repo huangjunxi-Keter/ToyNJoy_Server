@@ -24,11 +24,10 @@ namespace ToyNJoy.API.Controllers
 
         [HttpGet("find")]
         [Authorize]
-        public IEnumerable<WishList> find(string? name, int? maxPrice, int? minPrice, int? typeId, string? orderby) 
+        public IEnumerable<WishList> find(string? name, int? maxPrice, int? minPrice, int? productId, int? typeId, string? orderby) 
         {
-            string token = Request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
-            return bll.find(loginUser.Username, orderby, name, typeId, minPrice, maxPrice);
+            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            return bll.find(loginUser.Username, orderby, name, productId, typeId, minPrice, maxPrice);
         }
     }
 }

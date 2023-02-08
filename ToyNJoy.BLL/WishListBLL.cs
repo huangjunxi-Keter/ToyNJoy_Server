@@ -16,9 +16,9 @@ namespace ToyNJoy.BLL
         }
 
         public IEnumerable<WishList> find(string? userName, string? orderBy, string productName, 
-            int? productTypeId, int? productMinPrice, int? productMaxPrice)
+            int? productId, int? productTypeId, int? productMinPrice, int? productMaxPrice)
         {
-            return wishListDAL.find(userName, orderBy, productName, productTypeId, productMinPrice, productMaxPrice);
+            return wishListDAL.find(userName, orderBy, productName, productId, productTypeId, productMinPrice, productMaxPrice);
         }
     }
 }
