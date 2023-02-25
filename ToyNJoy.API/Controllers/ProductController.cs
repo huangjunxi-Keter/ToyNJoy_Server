@@ -33,9 +33,9 @@ namespace ToyNJoy.API.Controllers
         }
 
         [HttpGet("count")]
-        public int count(string? name, string? orderby)
+        public int count(string? name, int? maxPrice, int? minPrice, int? typeId)
         {
-            return bll.count(name, orderby);
+            return bll.count(name, maxPrice, minPrice, typeId);
         }
 
         [HttpPost("add")]

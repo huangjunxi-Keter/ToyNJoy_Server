@@ -77,7 +77,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public IActionResult GetUserImage()
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             string imageName = string.Empty;
             if (loginUser != null) 
             {
@@ -95,7 +95,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public string GetUserImageName()
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             string imageName = string.Empty;
             if (loginUser != null) 
             {
@@ -112,7 +112,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public User get()
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             User result = bll.get(loginUser.Username);
             return result;
         }
@@ -136,7 +136,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public UserInfo getInfo()
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             UserInfo result = infoBll.getByName(loginUser.Username);
             return result;
         }
@@ -161,7 +161,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public bool updateVirtual([FromForm] IFormCollection virtualImage)
         {
-            User user = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User user = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             user = bll.get(user.Username);
 
             FormFileCollection fileCollection = (FormFileCollection)virtualImage.Files;

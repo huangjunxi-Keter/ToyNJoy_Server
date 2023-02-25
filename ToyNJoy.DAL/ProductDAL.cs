@@ -31,7 +31,7 @@ namespace ToyNJoy.DAL
             return context.SaveChanges() > 0;
         }
 
-        public Product getById(int id) 
+        public Product getById(int id)
         {
             return context.Find<Product>(id);
         }
@@ -39,7 +39,7 @@ namespace ToyNJoy.DAL
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
             int? typeId, string? orderby, int? page, int? count)
         {
-            IQueryable<Product> result = context.Products;
+            IEnumerable<Product> result = context.Products;
             if (!string.IsNullOrEmpty(name))
                 result = result.Where(x => x.Name.Contains(name));
             if (maxPrice != null)
@@ -80,35 +80,19 @@ namespace ToyNJoy.DAL
             return result;
         }
 
-        public int count(string? name, string? orderby)
+        public int count(string? name, int? maxPrice, int? minPrice, int? typeId)
         {
             IQueryable<Product> result = context.Products;
             if (!string.IsNullOrEmpty(name))
                 result = result.Where(x => x.Name.IndexOf(name) > -1);
-            if (!string.IsNullOrEmpty(orderby))
-            {
-                switch (orderby)
-                {
-                    case "Name":
-                        result = result.OrderByDescending(x => x.Name);
-                        break;
-                    case "Price":
-                        result = result.OrderByDescending(x => x.Price);
-                        break;
-                    case "ReleaseDate":
-                        result = result.OrderByDescending(x => x.ReleaseDate);
-                        break;
-                    case "Browse":
-                        result = result.OrderByDescending(x => x.Browse);
-                        break;
-                    case "Purchases":
-                        result = result.OrderByDescending(x => x.Purchases);
-                        break;
-                    case "Discount":
-                        result = result.OrderByDescending(x => x.Discount);
-                        break;
-                }
-            }
+            if (!string.IsNullOrEmpty(name))
+                result = result.Where(x => x.Name.Contains(name));
+            if (maxPrice != null)
+                result = result.Where(x => x.Price <= maxPrice);
+            if (minPrice != null)
+                result = result.Where(x => x.Price >= minPrice);
+            if (typeId != null)
+                result = result.Where(x => x.TypeId == typeId);
             return result.Count();
         }
     }

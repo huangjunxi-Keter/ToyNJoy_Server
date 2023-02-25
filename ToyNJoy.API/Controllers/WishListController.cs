@@ -26,7 +26,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public IEnumerable<WishList> find(string? name, int? maxPrice, int? minPrice, int? productId, int? typeId, string? orderby) 
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.find(loginUser.Username, orderby, name, productId, typeId, minPrice, maxPrice);
         }
     }

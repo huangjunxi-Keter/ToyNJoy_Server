@@ -26,7 +26,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public IEnumerable<Library> find(string? name, int? productId, int? typeId, double? beginDays, double? endDays, string? orderby) 
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.find(loginUser.Username, name, productId, typeId, beginDays, endDays, orderby);
         }
 
@@ -34,7 +34,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public bool add([FromBody] Alipay alipay)
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.add(alipay, loginUser.Username);
         }
     }

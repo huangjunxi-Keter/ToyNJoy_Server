@@ -26,7 +26,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public IEnumerable<ShoppingCar> find(int? productId) 
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.find(loginUser.Username, productId);
         }
 
@@ -34,7 +34,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public bool add(int productId)
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.add(loginUser.Username, productId);
         }
 

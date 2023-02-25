@@ -30,7 +30,7 @@ namespace ToyNJoy.API.Controllers
         [Authorize]
         public string add() 
         {
-            User loginUser = BaseUtiliy.getLoginUser(Request, tokenHelper);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.add(loginUser.Username);
         }
     }

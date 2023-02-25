@@ -128,12 +128,11 @@ namespace ToyNJoy.Utiliy
             return result;
         }
 
-
-        public static User getLoginUser(HttpRequest request, TokenHelper tokenHelper)
+        public static T getTokenData<T>(HttpRequest request, TokenHelper tokenHelper)
         {
             string token = request.Headers["Authorization"].ToString().Split(' ')[1];
-            User loginUser = tokenHelper.GetToken<User>(token);
-            return loginUser;
+            T data = tokenHelper.GetToken<T>(token);
+            return data;
         }
     }
 }
