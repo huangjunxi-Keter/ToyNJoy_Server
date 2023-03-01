@@ -23,7 +23,7 @@ public partial class OrderItem
     /// <summary>
     /// 价格（根据商品价格和折扣计算）
     /// </summary>
-    public double Price { get; set; }
+    public double? Price { get; set; }
 
     public virtual Order Order { get; set; } = null!;
 

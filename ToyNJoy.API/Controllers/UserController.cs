@@ -159,31 +159,15 @@ namespace ToyNJoy.API.Controllers
         /// <returns></returns>
         [HttpPost("updateVirtual")]
         [Authorize]
-        public bool updateVirtual([FromForm] IFormCollection virtualImage)
+        public bool updateVirtual([FromForm] IFormCollection keyValuePairs)
         {
             User user = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             user = bll.get(user.Username);
 
-            FormFileCollection fileCollection = (FormFileCollection)virtualImage.Files;
-            foreach (IFormFile file in fileCollection)
+            FormFileCollection formFiles = (FormFileCollection)keyValuePairs.Files;
+            foreach (IFormFile file in formFiles)
             {
-                // 组成新名字
-                string imageType = file.FileName.Substring(file.FileName.LastIndexOf('.'));
-                string imageName = user.Username + "_virtual" + imageType;
-
-                string filename = AppContext.BaseDirectory.Split("\\bin\\")[0] + "/Image/user/" + imageName;
-                if (System.IO.File.Exists(filename))
-                {
-                    System.IO.File.Delete(filename);
-                }
-                using (FileStream fs = System.IO.File.Create(filename))
-                {
-                    // 复制文件
-                    file.CopyTo(fs);
-                    // 清空缓冲区数据
-                    fs.Flush();
-                }
-                user.VirtualImage = imageName;
+                user.VirtualImage = BaseUtiliy.SaveImage(user.Username + "_virtual_", "user", file);
             }
 
             return bll.upd(user);

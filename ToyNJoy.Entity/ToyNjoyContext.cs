@@ -397,10 +397,10 @@ public partial class ToyNjoyContext : DbContext
                 .HasComment("类型id")
                 .HasColumnName("type_id");
 
-            entity.HasOne(d => d.Type).WithMany(p => p.Products)
-                .HasForeignKey(d => d.TypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Product_Type_id");
+            //entity.HasOne(d => d.Type).WithMany(p => p.Products)
+            //    .HasForeignKey(d => d.TypeId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Product_Type_id");
         });
 
         modelBuilder.Entity<ProductHardwareRequirement>(entity =>
@@ -455,10 +455,10 @@ public partial class ToyNjoyContext : DbContext
                 .HasComment("推荐配置 运行内存")
                 .HasColumnName("RAM_");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.ProductHardwareRequirements)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Product_hardware_requirements_Product_id");
+            //entity.HasOne(d => d.Product).WithMany(p => p.ProductHardwareRequirements)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Product_hardware_requirements_Product_id");
         });
 
         modelBuilder.Entity<ProductPhotoGallery>(entity =>
@@ -497,6 +497,14 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("类型名称")
                 .HasColumnName("type_name");
+            entity.Property(e => e.State)
+                .HasComment("类型状态：0停用 1启用")
+                .HasColumnName("state");
+
+            entity.HasMany(e => e.Products).WithOne(e => e.Type)
+            .HasForeignKey(d => d.TypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_Product_Type_id");
         });
 
         modelBuilder.Entity<ShoppingCar>(entity =>
@@ -514,16 +522,6 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("用户名")
                 .HasColumnName("user_name");
-
-            //entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCars)
-            //    .HasForeignKey(d => d.ProductId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_Shopping_Car_product_name");
-
-            entity.HasOne(d => d.UserNameNavigation).WithMany(p => p.ShoppingCars)
-                .HasForeignKey(d => d.UserName)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Shopping_Car_user_name");
         });
 
         modelBuilder.Entity<User>(entity =>

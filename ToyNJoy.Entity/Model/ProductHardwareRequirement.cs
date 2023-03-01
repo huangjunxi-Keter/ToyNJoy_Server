@@ -5,6 +5,23 @@ namespace ToyNJoy.Entity.Model;
 
 public partial class ProductHardwareRequirement
 {
+    public ProductHardwareRequirement() { }
+
+    public ProductHardwareRequirement(int productId, string initialStr) 
+    {
+        this.ProductId = productId;
+        this.Os = initialStr;
+        this.Os1 = initialStr;
+        this.Cpu = initialStr;
+        this.Cpu1 = initialStr;
+        this.Ram = initialStr;
+        this.Ram1 = initialStr;
+        this.Gpu = initialStr;
+        this.Gpu1 = initialStr;
+        this.DirectX = initialStr;
+        this.DirectX1 = initialStr;
+    }
+
     /// <summary>
     /// 主键
     /// </summary>
@@ -65,5 +82,5 @@ public partial class ProductHardwareRequirement
     /// </summary>
     public string DirectX1 { get; set; } = null!;
 
-    public virtual Product Product { get; set; } = null!;
+    public virtual Product? Product { get; set; }
 }

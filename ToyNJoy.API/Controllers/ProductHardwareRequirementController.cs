@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
 using ToyNJoy.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -22,6 +23,13 @@ namespace ToyNJoy.API.Controllers
         public ProductHardwareRequirement getByProductId(int id)
         {
             return bll.getByProductId(id);
+        }
+
+        [HttpPost("upd")]
+        [Authorize]
+        public bool upd([FromBody] ProductHardwareRequirement productHardwareRequirement) 
+        {
+            return bll.upd(productHardwareRequirement);
         }
     }
 }

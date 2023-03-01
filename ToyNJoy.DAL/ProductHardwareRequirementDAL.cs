@@ -16,5 +16,17 @@ namespace ToyNJoy.DAL
         {
             return context.ProductHardwareRequirements.First(p => p.ProductId == id);
         }
+
+        public bool add(ProductHardwareRequirement productHardwareRequirement)
+        {
+            context.ProductHardwareRequirements.Add(productHardwareRequirement);
+            return context.SaveChanges() > 0;
+        }
+
+        public bool upd(ProductHardwareRequirement productHardwareRequirement)
+        {
+            context.ProductHardwareRequirements.Update(productHardwareRequirement);
+            return context.SaveChanges() > 0;
+        }
     }
 }

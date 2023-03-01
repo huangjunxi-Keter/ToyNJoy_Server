@@ -8,12 +8,17 @@ public partial class ProductType
     /// <summary>
     /// 主键
     /// </summary>
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     /// <summary>
     /// 类型名称
     /// </summary>
-    public string TypeName { get; set; } = null!;
+    public string? TypeName { get; set; }
+
+    /// <summary>
+    /// 类型状态：0停用 1启用
+    /// </summary>
+    public int? State { get; set; }
 
     public virtual ICollection<Product> Products { get; } = new List<Product>();
 }

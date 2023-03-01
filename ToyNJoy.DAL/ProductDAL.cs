@@ -13,10 +13,18 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public bool add(Product p)
+        public Product add(Product p)
         {
+            Product result = null;
             context.Add(p);
-            return context.SaveChanges() > 0;
+            context.SaveChanges();
+            // 将添加后的数据补充到实体（id）
+            context.Entry(p);
+            if (p.Id != null)
+            {
+                result = p;
+            }
+            return result;
         }
 
         public bool del(string id)
@@ -80,11 +88,9 @@ namespace ToyNJoy.DAL
             return result;
         }
 
-        public int count(string? name, int? maxPrice, int? minPrice, int? typeId)
+        public int findCount(string? name, int? maxPrice, int? minPrice, int? typeId)
         {
             IQueryable<Product> result = context.Products;
-            if (!string.IsNullOrEmpty(name))
-                result = result.Where(x => x.Name.IndexOf(name) > -1);
             if (!string.IsNullOrEmpty(name))
                 result = result.Where(x => x.Name.Contains(name));
             if (maxPrice != null)

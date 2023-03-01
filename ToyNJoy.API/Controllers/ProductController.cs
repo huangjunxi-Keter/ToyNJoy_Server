@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
 using ToyNJoy.Entity;
+using ToyNJoy.Utiliy;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -32,16 +34,47 @@ namespace ToyNJoy.API.Controllers
             return data;
         }
 
-        [HttpGet("count")]
-        public int count(string? name, int? maxPrice, int? minPrice, int? typeId)
+        [HttpGet("findCount")]
+        public int findCount(string? name, int? maxPrice, int? minPrice, int? typeId)
         {
-            return bll.count(name, maxPrice, minPrice, typeId);
+            return bll.findCount(name, maxPrice, minPrice, typeId);
         }
 
         [HttpPost("add")]
-        public bool add([FromBody] Product p)
+        [Authorize]
+        public Product add([FromBody] Product p)
         {
             return bll.add(p);
+        }
+
+        [HttpPost("upd")]
+        [Authorize]
+        public bool upd([FromBody] Product p)
+        {
+            return bll.upd(p);
+        }
+
+        [HttpPost("updateImage")]
+        [Authorize]
+        public string updateImage([FromForm] IFormCollection keyValuePairs)
+        {
+            string result = "";
+            FormFileCollection formFiles = (FormFileCollection)keyValuePairs.Files;
+            foreach (FormFile file in formFiles)
+            {
+                Product product = bll.getById(Convert.ToInt32(file.Name));
+                string oldImage = product.Image;
+                product.Image = BaseUtiliy.SaveImage(file.Name, "products", file);
+                if (bll.upd(product))
+                {
+                    if (oldImage != ".png") 
+                    {
+                        BaseUtiliy.DeleteImage("products", oldImage);
+                    }
+                    result = product.Image;
+                }
+            }
+            return result;
         }
     }
 }

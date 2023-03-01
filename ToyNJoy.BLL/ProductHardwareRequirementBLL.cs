@@ -19,5 +19,10 @@ namespace ToyNJoy.BLL
         { 
             return productHardwareRequirementDAL.getByProductId(id);
         }
+
+        public bool upd(ProductHardwareRequirement productHardwareRequirement)
+        {
+            return productHardwareRequirementDAL.upd(productHardwareRequirement);
+        }
     }
 }

@@ -134,5 +134,49 @@ namespace ToyNJoy.Utiliy
             T data = tokenHelper.GetToken<T>(token);
             return data;
         }
+
+        public static string SaveImage(string baseName, string path, IFormFile file)
+        {
+            // 组成新名字
+            string imageType = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+            string imageName = baseName + DateTime.Now.ToString("yyyyMMddhhmmms") + imageType;
+
+            string filename = AppContext.BaseDirectory.Split("\\bin\\")[0] + "/Image/" + path + "/" + imageName;
+            DeleteImage(path, imageName);
+            using (FileStream fs = System.IO.File.Create(filename))
+            {
+                // 复制文件
+                file.CopyTo(fs);
+                // 清空缓冲区数据
+                fs.Flush();
+            }
+
+            return imageName;
+        }
+
+        public static void DeleteImage(string path, string fileName)
+        { 
+            string filepath = AppContext.BaseDirectory.Split("\\bin\\")[0] + "/Image/" + path + "/" + fileName;
+            if (System.IO.File.Exists(filepath))
+            {
+                System.IO.File.Delete(filepath);
+            }
+        }
+
+        private static string GenerateStringID()
+        {
+            long i = 1;
+            foreach (byte b in Guid.NewGuid().ToByteArray())
+            {
+                i *= ((int)b + 1);
+            }
+            return string.Format("{0:x}", i - DateTime.Now.Ticks);
+        }
+
+        private static long GenerateIntIDInt64()
+        {
+            byte[] buffer = Guid.NewGuid().ToByteArray();
+            return BitConverter.ToInt64(buffer, 0);
+        }
     }
 }

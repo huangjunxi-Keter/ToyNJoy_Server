@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.BLL;
 using ToyNJoy.Entity.Model;
 using ToyNJoy.Entity;
+using ToyNJoy.Utiliy;
 
 namespace ToyNJoy.API.Controllers
 {
@@ -22,6 +24,37 @@ namespace ToyNJoy.API.Controllers
         public IEnumerable<ProductPhotoGallery> getByProductId(int id)
         {
             return bll.getByProductId(id);
+        }
+
+        [HttpPost("add")]
+        [Authorize]
+        public string add([FromForm] IFormCollection keyValuePairs)
+        {
+            string result = "";
+            FormFileCollection formFiles = (FormFileCollection)keyValuePairs.Files;
+            foreach (FormFile file in formFiles)
+            {
+                string image = BaseUtiliy.SaveImage(file.Name, "photoGallery", file);
+                if (bll.add(Convert.ToInt32(file.Name), image))
+                {
+                    result = image;
+                }
+            }
+
+            return result;
+        }
+
+        [HttpGet("del")]
+        [Authorize]
+        public bool del(int productId, string image)
+        {
+            bool result = false;
+            if (bll.del(productId, image)) 
+            {
+                BaseUtiliy.DeleteImage("photoGallery", image);
+                result = true;
+            }
+            return result;
         }
     }
 }
