@@ -48,6 +48,8 @@ public partial class ToyNjoyContext : DbContext
 
     public virtual DbSet<WishList> WishLists { get; set; }
 
+    public virtual DbSet<UserType> UserTypes { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=ToyNJoy2.0;User ID=sa;Password=sa;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
@@ -500,11 +502,6 @@ public partial class ToyNjoyContext : DbContext
             entity.Property(e => e.State)
                 .HasComment("类型状态：0停用 1启用")
                 .HasColumnName("state");
-
-            entity.HasMany(e => e.Products).WithOne(e => e.Type)
-            .HasForeignKey(d => d.TypeId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("FK_Product_Type_id");
         });
 
         modelBuilder.Entity<ShoppingCar>(entity =>
@@ -557,6 +554,9 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("头像")
                 .HasColumnName("virtual_image");
+            entity.Property(e => e.TypeId)
+                .HasComment("类型Id")
+                .HasColumnName("type_id");
         });
 
         modelBuilder.Entity<UserInfo>(entity =>
@@ -638,6 +638,22 @@ public partial class ToyNjoyContext : DbContext
                 .HasForeignKey(d => d.UserName)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Wish_List_user_name");
+        });
+
+        modelBuilder.Entity<UserType>(entity =>
+        {
+            entity.ToTable("User_Type");
+
+            entity.Property(e => e.Id)
+                .HasComment("主键 自增")
+                .HasColumnName("id");
+            entity.Property(e => e.TypeName)
+                .IsUnicode(false)
+                .HasComment("类型名称")
+                .HasColumnName("type_name");
+            entity.Property(e => e.State)
+                .HasComment("状态：0禁用 1启用用")
+                .HasColumnName("state");
         });
 
         OnModelCreatingPartial(modelBuilder);

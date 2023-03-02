@@ -41,9 +41,14 @@ public partial class User
     public DateTime? RegisterTime { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态 0禁用 1启用
     /// </summary>
     public int? State { get; set; }
+
+    /// <summary>
+    /// 类型Id
+    /// </summary>
+    public int? TypeId { get; set; }
 
     public virtual ICollection<Friend> FriendFriendNameNavigations { get; } = new List<Friend>();
 

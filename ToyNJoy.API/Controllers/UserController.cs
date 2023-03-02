@@ -24,6 +24,18 @@ namespace ToyNJoy.API.Controllers
             this.tokenHelper = tokenHelper;
         }
 
+        [HttpGet("find")]
+        public IEnumerable<User> find(string? username, string? nickname, string? email, int? lv, int? state, int? typeId, int? page, int? count)
+        {
+            return bll.find(username, nickname, email, lv, state, typeId, page, count);
+        }
+
+        [HttpGet("findCount")]
+        public int findCount(string? username, string? nickname, string? email, int? lv, int? state, int? typeId)
+        {
+            return bll.findCount(username, nickname, email, lv, state, typeId);
+        }
+
         /// <summary>
         /// 登录
         /// </summary>
@@ -64,9 +76,9 @@ namespace ToyNJoy.API.Controllers
         /// <returns></returns>
         [HttpPost("add")]
         [AllowAnonymous]
-        public string add([FromBody]User user)
+        public string add([FromBody] User user)
         {
-            return bll.add(user);   
+            return bll.add(user);
         }
 
         /// <summary>
@@ -79,7 +91,7 @@ namespace ToyNJoy.API.Controllers
         {
             User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             string imageName = string.Empty;
-            if (loginUser != null) 
+            if (loginUser != null)
             {
                 imageName = loginUser.VirtualImage;
             }
@@ -97,7 +109,7 @@ namespace ToyNJoy.API.Controllers
         {
             User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             string imageName = string.Empty;
-            if (loginUser != null) 
+            if (loginUser != null)
             {
                 imageName = loginUser.VirtualImage;
             }

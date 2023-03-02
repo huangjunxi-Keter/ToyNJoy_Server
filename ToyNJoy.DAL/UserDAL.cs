@@ -13,6 +13,48 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
+        public IEnumerable<User> find(string? username, string? nickname, string? email, int? lv, int? state, int? typeId, int? page, int? count)
+        {
+            IEnumerable<User> result = context.Users;
+            if (!string.IsNullOrEmpty(username))
+                result = result.Where(x => x.Username.Contains(username));
+            if (!string.IsNullOrEmpty(nickname))
+                result = result.Where(x => x.Nickname.Contains(nickname));
+            if (!string.IsNullOrEmpty(email))
+                result = result.Where(x => x.Email.Contains(email));
+            if (lv != null)
+                result = result.Where(x => x.Lv == lv);
+            if (state != null)
+                result = result.Where(x => x.State == state);
+            if (typeId != null)
+                result = result.Where(x => x.TypeId == typeId);
+            if (page != null && count != null)
+                result = result.Skip((page * count).Value);
+            if (count != null)
+                result = result.Take(count.Value);
+
+            return result;
+        }
+
+        public int findCount(string? username, string? nickname, string? email, int? lv, int? state, int? typeId)
+        {
+            IEnumerable<User> result = context.Users;
+            if (!string.IsNullOrEmpty(username))
+                result = result.Where(x => x.Username.Contains(username));
+            if (!string.IsNullOrEmpty(nickname))
+                result = result.Where(x => x.Nickname.Contains(nickname));
+            if (!string.IsNullOrEmpty(email))
+                result = result.Where(x => x.Email.Contains(email));
+            if (lv != null)
+                result = result.Where(x => x.Lv == lv);
+            if (state != null)
+                result = result.Where(x => x.State == state);
+            if (typeId != null)
+                result = result.Where(x => x.TypeId == typeId);
+
+            return result.Count();
+        }
+
         public User Login(string userName, string passwor) 
         {
             return context.Users.Where(u => u.Username.Equals(userName) && u.Password.Equals(passwor)).FirstOrDefault();

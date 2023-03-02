@@ -29,11 +29,11 @@ namespace ToyNJoy.API.Controllers
         }
 
         [HttpGet("getVerificationCode")]
-        public string EmailValidation(string email)
+        public string EmailValidation(string email, string? title)
         {
             string result = "";
             string vc = BaseUtiliy.GenerateVerificationCode();
-            if (EmailHelper.SendMail(email, "注册ToyNJoy", "您的验证码为：" + vc))
+            if (EmailHelper.SendMail(email, !string.IsNullOrEmpty(title) ? title : "注册ToyNJoy", "您的验证码为：" + vc))
                 result = vc;
             return result;
         }

@@ -16,6 +16,16 @@ namespace ToyNJoy.BLL
             userDAL = new UserDAL(context);
         }
 
+        public IEnumerable<User> find(string? username, string? nickname, string? email, int? lv, int? state, int? typeId, int? page, int? count)
+        {
+            return userDAL.find(username, nickname, email, lv, state, typeId, page, count); ;
+        }
+
+        public int findCount(string? username, string? nickname, string? email, int? lv, int? state, int? typeId)
+        {
+            return userDAL.findCount(username, nickname, email, lv, state, typeId);
+        }
+
         public User Login(string userName, string password)
         {
             return userDAL.Login(userName, password);
@@ -43,6 +53,10 @@ namespace ToyNJoy.BLL
                 user.VirtualImage = ".png";
                 user.RegisterTime = DateTime.Now;
                 user.State = 0;
+                if (user.TypeId == null)
+                {
+                    user.TypeId = 2;
+                }
 
                 UserInfo userInfo = new UserInfo();
                 userInfo.UserName = user.Username;
