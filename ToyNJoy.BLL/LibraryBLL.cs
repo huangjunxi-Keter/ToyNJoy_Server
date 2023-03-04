@@ -37,7 +37,7 @@ namespace ToyNJoy.BLL
 
             Order order = orderDAL.get(alipay.out_trade_no);
             order.State = 1;
-            order.AlipayData = JsonConvert.SerializeObject(alipay);
+            order.AlipayResponse = JsonConvert.SerializeObject(alipay);
 
             IEnumerable<OrderItem> orderItems = orderItemDAL.find(alipay.out_trade_no);
             List<Library> libraries = new List<Library>();

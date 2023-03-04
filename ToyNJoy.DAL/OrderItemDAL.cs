@@ -1,5 +1,6 @@
 ﻿using ToyNJoy.Entity;
 using ToyNJoy.Entity.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToyNJoy.DAL
 {
@@ -12,9 +13,14 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public IEnumerable<OrderItem> find(string orderId)
+        public IEnumerable<OrderItem> find(string? orderId, bool? hasProduct = false)
         {
-            return context.OrderItems.Where(o => o.OrderId.Equals(orderId));
+            IQueryable<OrderItem> result = context.OrderItems;
+            if (!string.IsNullOrEmpty(orderId))
+                result = result.Where(x => x.OrderId == orderId);
+            if (hasProduct != null && hasProduct.Value)
+                result = result.Include(o => o.Product);
+            return result;
         }
 
         public OrderItem get(int id)

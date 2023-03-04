@@ -54,7 +54,7 @@ namespace ToyNJoy.API.Controllers
             */
 
             IActionResult result;
-            var userData = bll.Login(user.Username, user.Password);
+            var userData = bll.Login(user.Username, user.Password, user.TypeId);
             if (userData == null)
             {
                 result = Ok(new ResponseModel { Code = 0, Message = "账号或密码错误" });

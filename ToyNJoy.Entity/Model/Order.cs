@@ -21,7 +21,7 @@ public partial class Order
     public double? TotalAmount { get; set; }
 
     /// <summary>
-    /// 状态 0未支付 1支付
+    /// 状态 0未支付 1支付 2已关闭
     /// </summary>
     public int? State { get; set; }
 
@@ -30,8 +30,15 @@ public partial class Order
     /// </summary>
     public DateTime? CreateDate { get; set; }
 
+    /// <summary>
+    /// 支付跳转表单
+    /// </summary>
+    public string? AlipayForm { get; set; }
 
-    public string? AlipayData { get; set; }
+    /// <summary>
+    /// 支付宝回调参数
+    /// </summary>
+    public string? AlipayResponse { get; set; }
 
     // public virtual ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
 

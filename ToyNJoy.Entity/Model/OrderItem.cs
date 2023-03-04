@@ -21,9 +21,19 @@ public partial class OrderItem
     public int ProductId { get; set; }
 
     /// <summary>
-    /// 价格（根据商品价格和折扣计算）
+    /// 原价
     /// </summary>
-    public double? Price { get; set; }
+    public double? OriginalPrices { get; set; }
+
+    /// <summary>
+    /// 折扣
+    /// </summary>
+    public double? Discount { get; set; }
+
+    /// <summary>
+    /// 实付（根据商品价格和折扣计算）
+    /// </summary>
+    public double? Payment { get; set; }
 
     public virtual Order Order { get; set; } = null!;
 

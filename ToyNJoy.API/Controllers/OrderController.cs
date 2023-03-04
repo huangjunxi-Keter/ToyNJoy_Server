@@ -33,5 +33,68 @@ namespace ToyNJoy.API.Controllers
             User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.add(loginUser.Username);
         }
+
+        /// <summary>
+        /// 查询订单
+        /// </summary>
+        /// <param name="orderId">订单号</param>
+        /// <param name="username">用户名（主键）</param>
+        /// <param name="minTotalAmount">最小总价</param>
+        /// <param name="maxTotalAmount">最大总价</param>
+        /// <param name="state">状态 0 1 2</param>
+        /// <param name="date">创建日期</param>
+        /// <param name="page">当前页页数减一</param>
+        /// <param name="count">总条数</param>
+        /// <returns></returns>
+        [HttpGet("find")]
+        [Authorize]
+        public IEnumerable<Order> find(string? orderId, string? username, int? minTotalAmount, int? maxTotalAmount,
+            int? state, DateTime? date, int? page, int? count)
+        {
+            return bll.find(orderId, username, minTotalAmount, maxTotalAmount, state, date, page, count);
+        }
+
+        /// <summary>
+        /// 订单总数
+        /// </summary>
+        /// <param name="orderId">订单号</param>
+        /// <param name="username">用户名（主键）</param>
+        /// <param name="minTotalAmount">最小总价</param>
+        /// <param name="maxTotalAmount">最大总价</param>
+        /// <param name="state">状态 0 1 2</param>
+        /// <param name="date">创建日期</param>
+        /// <returns></returns>
+        [HttpGet("findCount")]
+        [Authorize]
+        public int findCount(string? orderId, string? username, int? minTotalAmount, int? maxTotalAmount,
+            int? state, DateTime? date)
+        {
+            return bll.findCount(orderId, username, minTotalAmount, maxTotalAmount, state, date);
+        }
+
+        /// <summary>
+        /// 修改订单
+        /// </summary>
+        /// <param name="order">订单实体</param>
+        /// <returns></returns>
+        [HttpPost("upd")]
+        [Authorize]
+        public bool upd([FromBody] Order order)
+        {
+            return bll.upd(order);
+        }
+
+        /// <summary>
+        /// 获取订单详情
+        /// </summary>
+        /// <param name="orderId">订单号</param>
+        /// <param name="hasProduct">是否带商品信息</param>
+        /// <returns></returns>
+        [HttpGet("findItems")]
+        [Authorize]
+        public IEnumerable<OrderItem> findItems(string? orderId, bool? hasProduct)
+        {
+            return bll.findItems(orderId, hasProduct);
+        }
     }
 }

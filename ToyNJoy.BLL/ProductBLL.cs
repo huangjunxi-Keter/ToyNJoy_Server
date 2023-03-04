@@ -9,6 +9,8 @@ namespace ToyNJoy.BLL
     {
         private ProductDAL productDAL;
         private ProductHardwareRequirementDAL productHardwareRequirementDAL;
+        private WishListDAL wishListDAL;
+        private UserDAL userDAL;
         private ToyNjoyContext context;
 
         public ProductBLL(ToyNjoyContext context)
@@ -16,6 +18,8 @@ namespace ToyNJoy.BLL
             this.context = context;
             productDAL = new ProductDAL(context);
             productHardwareRequirementDAL = new ProductHardwareRequirementDAL(context);
+            wishListDAL = new WishListDAL(context);
+            userDAL = new UserDAL(context);
         }
 
         public Product add(Product p)
@@ -23,7 +27,7 @@ namespace ToyNJoy.BLL
             p.Image = ".png";
             p.Browse = 0;
             p.Purchases = 0;
-            p.Discount /= 100;
+            p.Discount /= 10;
             Product result = null;
 
             using (IDbContextTransaction dbContextTransaction = context.Database.BeginTransaction())
@@ -48,28 +52,41 @@ namespace ToyNJoy.BLL
             return result;
         }
 
-        public bool del(String id)
-        {
-            return productDAL.del(id);
-        }
-
         public bool upd(Product p)
         {
             bool result = false;
             if (p != null && p.Id != null)
             {
                 var product = productDAL.getById(p.Id.Value);
+
+                bool cutPrice = product.Price > p.Price;
+                bool discount = p.Discount < 10;
+
                 product.Name = p.Name;
                 product.TypeId = p.TypeId;
                 product.AgeGrading = p.AgeGrading;
                 product.Price = p.Price;
-                product.Discount = product.Discount;
+                product.Discount = p.Discount / 10;
                 product.Intro = p.Intro;
                 product.Developers = p.Developers;
                 product.Publisher = p.Publisher;
                 product.ReleaseDate = p.ReleaseDate;
 
                 result = productDAL.upd(product);
+
+                if (result && (cutPrice || discount))
+                {
+                    List<string> usernameList = new List<string>();
+                    foreach (WishList wl in wishListDAL.find(product.Id))
+                    {
+                        usernameList.Add(wl.UserName);
+                    }
+                    foreach (User u in userDAL.find(usernameList))
+                    {
+                        string message = string.Format("您愿望单中的商品《{0}》{1}", product.Name, cutPrice ? "降价了" : "正在促销");
+                        EmailHelper.SendMail(u.Email, "关于您的愿望单", message);
+                    }
+                }
             }
             return result;
         }

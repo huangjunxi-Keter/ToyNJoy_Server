@@ -62,6 +62,16 @@ namespace ToyNJoy.DAL
             return result.Include(w => w.Product);
         }
 
+        public IEnumerable<WishList> find(int? prodictId)
+        {
+            IEnumerable<WishList> result = context.WishLists;
+            if (prodictId != null)
+            {
+                result = result.Where(w => w.ProductId == prodictId);
+            }
+            return result;
+        }
+
         public bool del(string userName, IEnumerable<OrderItem> orderItems)
         {
             context.WishLists

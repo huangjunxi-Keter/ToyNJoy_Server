@@ -37,5 +37,11 @@ namespace ToyNJoy.API.Controllers
                 result = vc;
             return result;
         }
+
+        [HttpGet("sendEmail")]
+        public bool SendEmail(string email, string title, string message)
+        {
+            return EmailHelper.SendMail(email, title, message);
+        }
     }
 }

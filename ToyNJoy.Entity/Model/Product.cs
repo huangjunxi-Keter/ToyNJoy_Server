@@ -72,9 +72,9 @@ public partial class Product
 
     // public virtual ICollection<Library> Libraries { get; } = new List<Library>();
 
-    public virtual ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
+    // public virtual ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
 
-    //public virtual ICollection<ProductHardwareRequirement> ProductHardwareRequirements { get; } = new List<ProductHardwareRequirement>();
+    // public virtual ICollection<ProductHardwareRequirement> ProductHardwareRequirements { get; } = new List<ProductHardwareRequirement>();
 
     public virtual ICollection<ProductPhotoGallery> ProductPhotoGalleries { get; } = new List<ProductPhotoGallery>();
 

@@ -36,6 +36,11 @@ namespace ToyNJoy.DAL
             return result;
         }
 
+        public IEnumerable<User> find(List<string> usernames)
+        {
+            return context.Users.Where(u => usernames.Contains(u.Username));
+        }
+
         public int findCount(string? username, string? nickname, string? email, int? lv, int? state, int? typeId)
         {
             IEnumerable<User> result = context.Users;
@@ -55,9 +60,12 @@ namespace ToyNJoy.DAL
             return result.Count();
         }
 
-        public User Login(string userName, string passwor) 
+        public User Login(string userName, string passwor, int? typeId)
         {
-            return context.Users.Where(u => u.Username.Equals(userName) && u.Password.Equals(passwor)).FirstOrDefault();
+            IQueryable<User> users = context.Users;
+            if (typeId != null)
+                users = users.Where(u => u.TypeId == typeId);
+            return users.Where(u => u.Username.Equals(userName) && u.Password.Equals(passwor)).FirstOrDefault();
         }
 
         public User get(string userName) 

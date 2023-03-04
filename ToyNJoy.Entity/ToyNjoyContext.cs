@@ -14,7 +14,6 @@ public partial class ToyNjoyContext : DbContext
     {
     }
 
-    public virtual DbSet<Administrator> Administrators { get; set; }
 
     public virtual DbSet<Friend> Friends { get; set; }
 
@@ -56,27 +55,6 @@ public partial class ToyNjoyContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Administrator>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_System");
-
-            entity.ToTable("Administrator");
-
-            entity.Property(e => e.Id)
-                .HasComment("主键")
-                .HasColumnName("id");
-            entity.Property(e => e.SaName)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasComment("账号")
-                .HasColumnName("sa_name");
-            entity.Property(e => e.SaPassword)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasComment("密码")
-                .HasColumnName("sa_password");
-        });
-
         modelBuilder.Entity<Friend>(entity =>
         {
             entity.ToTable("Friend");
@@ -273,6 +251,9 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("类型名")
                 .HasColumnName("type_name");
+            entity.Property(e => e.State)
+                .HasComment("状态 0停用 1启用")
+                .HasColumnName("state");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -291,7 +272,7 @@ public partial class ToyNjoyContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("create_date");
             entity.Property(e => e.State)
-                .HasComment("状态 0未支付 1支付")
+                .HasComment("状态 0未支付 1支付 2已关闭")
                 .HasColumnName("state");
             entity.Property(e => e.TotalAmount)
                 .HasComment("总价")
@@ -302,10 +283,14 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("用户名")
                 .HasColumnName("username");
-            entity.Property(e => e.AlipayData)
+            entity.Property(e => e.AlipayForm)
+                .IsUnicode(false)
+                .HasComment("支付跳转表单")
+                .HasColumnName("alipay_form");
+            entity.Property(e => e.AlipayResponse)
                 .IsUnicode(false)
                 .HasComment("支付宝回调参数")
-                .HasColumnName("alipay_data");
+                .HasColumnName("alipay_response");
 
             entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.Username)
@@ -327,10 +312,18 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("订单id")
                 .HasColumnName("order_id");
-            entity.Property(e => e.Price)
-                .HasComment("价格（根据商品价格和折扣计算）")
+            entity.Property(e => e.OriginalPrices)
+                .HasComment("原价")
                 .HasColumnType("float")
-                .HasColumnName("price");
+                .HasColumnName("original_prices");
+            entity.Property(e => e.Discount)
+                .HasComment("折扣")
+                .HasColumnType("float")
+                .HasColumnName("discount");
+            entity.Property(e => e.Payment)
+                .HasComment("实付（根据商品价格和折扣计算）")
+                .HasColumnType("float")
+                .HasColumnName("payment");
             entity.Property(e => e.ProductId)
                 .HasComment("商品id")
                 .HasColumnName("product_id");
@@ -340,10 +333,10 @@ public partial class ToyNjoyContext : DbContext
             //    .OnDelete(DeleteBehavior.ClientSetNull)
             //    .HasConstraintName("inOrder");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("itemProduct");
+            //entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("itemProduct");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -519,6 +512,16 @@ public partial class ToyNjoyContext : DbContext
                 .IsUnicode(false)
                 .HasComment("用户名")
                 .HasColumnName("user_name");
+
+            //entity.HasOne(d => d.Product).WithMany(p => p.ShoppingCars)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Shopping_Car_product_id");
+
+            entity.HasOne(d => d.UserNameNavigation).WithMany(p => p.ShoppingCars)
+                .HasForeignKey(d => d.UserName)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Shopping_Car_user_name");
         });
 
         modelBuilder.Entity<User>(entity =>

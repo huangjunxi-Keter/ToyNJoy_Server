@@ -27,12 +27,6 @@ namespace ToyNJoy.DAL
             return result;
         }
 
-        public bool del(string id)
-        {
-            context.Remove(id);
-            return context.SaveChanges() > 0;
-        }
-
         public bool upd(Product p)
         {
             context.Update(p);

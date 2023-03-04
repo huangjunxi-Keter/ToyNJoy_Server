@@ -21,14 +21,19 @@ namespace ToyNJoy.BLL
             return userDAL.find(username, nickname, email, lv, state, typeId, page, count); ;
         }
 
+        public IEnumerable<User> find(List<string> usernames)
+        {
+            return userDAL.find(usernames);
+        }
+
         public int findCount(string? username, string? nickname, string? email, int? lv, int? state, int? typeId)
         {
             return userDAL.findCount(username, nickname, email, lv, state, typeId);
         }
 
-        public User Login(string userName, string password)
+        public User Login(string userName, string password, int? typeId)
         {
-            return userDAL.Login(userName, password);
+            return userDAL.Login(userName, password, typeId);
         }
 
         public User get(string userName) 
