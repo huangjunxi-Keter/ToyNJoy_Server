@@ -24,15 +24,16 @@ namespace ToyNJoy.BLL
         /// </summary>
         /// <param name="title">标题</param>
         /// <param name="text">内容</param>
+        /// <param name="date">更新日期</param>
         /// <param name="productId">产品id</param>
         /// <param name="typeId">类型id</param>
         /// <param name="orderby">排序方式</param>
         /// <param name="page">当前页减一</param>
         /// <param name="count">总条数</param>
         /// <returns></returns>
-        public IEnumerable<News> find(string? title, string? text, int? productId, int? typeId, string? orderby, int? page, int? count) 
+        public IEnumerable<News> find(string? title, string? text, DateTime? date, int? productId, int? typeId, string? orderby, int? page, int? count) 
         {
-            return newsDAL.find(title, text, productId, typeId, orderby, page, count);
+            return newsDAL.find(title, text, date, productId, typeId, orderby, page, count);
         }
 
         /// <summary>
@@ -43,9 +44,19 @@ namespace ToyNJoy.BLL
         /// <param name="productId">产品id</param>
         /// <param name="typeId">类型id</param>
         /// <returns></returns>
-        public int findCount(string? title, string? text, int? productId, int? typeId)
+        public int findCount(string? title, string? text, DateTime? date, int? productId, int? typeId)
         {
-            return newsDAL.findCount(title, text, productId, typeId);
+            return newsDAL.findCount(title, text, date, productId, typeId);
+        }
+
+        /// <summary>
+        /// 获取实体
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        public News get(int id)
+        {
+            return newsDAL.get(id);
         }
 
         /// <summary>
@@ -53,8 +64,9 @@ namespace ToyNJoy.BLL
         /// </summary>
         /// <param name="news">新闻实体</param>
         /// <returns></returns>
-        public bool add(News news)
+        public News add(News news)
         {
+            news.UpdateTime = DateTime.Now;
             return newsDAL.add(news);
         }
 
@@ -65,6 +77,7 @@ namespace ToyNJoy.BLL
         /// <returns></returns>
         public bool upd(News news)
         {
+            news.UpdateTime = DateTime.Now;
             return newsDAL.upd(news);
         }
 

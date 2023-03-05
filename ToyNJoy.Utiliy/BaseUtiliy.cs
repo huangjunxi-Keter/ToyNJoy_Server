@@ -135,14 +135,17 @@ namespace ToyNJoy.Utiliy
             return data;
         }
 
-        public static string SaveImage(string baseName, string path, IFormFile file)
+        public static string SaveFile(string baseName, string path, IFormFile file)
         {
+            string fileType = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+            string fileName = baseName;
             // 组成新名字
-            string imageType = file.FileName.Substring(file.FileName.LastIndexOf('.'));
-            string imageName = baseName + DateTime.Now.ToString("yyyyMMddhhmmms") + imageType;
-
-            string filename = AppContext.BaseDirectory.Split("\\bin\\")[0] + "/Image/" + path + "/" + imageName;
-            DeleteImage(path, imageName);
+            if (fileName.IndexOf(".") == -1)
+            {
+                fileName += DateTime.Now.ToString("yyyyMMddhhmmms") + fileType;
+            }
+            string filename = AppContext.BaseDirectory.Split("\\bin\\")[0] + path + "/" + fileName;
+            DeleteFile(path, fileName);
             using (FileStream fs = System.IO.File.Create(filename))
             {
                 // 复制文件
@@ -151,12 +154,12 @@ namespace ToyNJoy.Utiliy
                 fs.Flush();
             }
 
-            return imageName;
+            return fileName;
         }
 
-        public static void DeleteImage(string path, string fileName)
+        public static void DeleteFile(string path, string fileName)
         { 
-            string filepath = AppContext.BaseDirectory.Split("\\bin\\")[0] + "/Image/" + path + "/" + fileName;
+            string filepath = AppContext.BaseDirectory.Split("\\bin\\")[0] + path + "/" + fileName;
             if (System.IO.File.Exists(filepath))
             {
                 System.IO.File.Delete(filepath);

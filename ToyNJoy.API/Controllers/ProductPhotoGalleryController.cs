@@ -34,7 +34,7 @@ namespace ToyNJoy.API.Controllers
             FormFileCollection formFiles = (FormFileCollection)keyValuePairs.Files;
             foreach (FormFile file in formFiles)
             {
-                string image = BaseUtiliy.SaveImage(file.Name, "photoGallery", file);
+                string image = BaseUtiliy.SaveFile(file.Name, "/Image/photoGallery", file);
                 if (bll.add(Convert.ToInt32(file.Name), image))
                 {
                     result = image;
@@ -49,9 +49,9 @@ namespace ToyNJoy.API.Controllers
         public bool del(int productId, string image)
         {
             bool result = false;
-            if (bll.del(productId, image)) 
+            if (bll.del(productId, image))
             {
-                BaseUtiliy.DeleteImage("photoGallery", image);
+                BaseUtiliy.DeleteFile("/Image/photoGallery", image);
                 result = true;
             }
             return result;

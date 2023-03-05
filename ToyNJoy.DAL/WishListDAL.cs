@@ -74,10 +74,21 @@ namespace ToyNJoy.DAL
 
         public bool del(string userName, IEnumerable<OrderItem> orderItems)
         {
-            context.WishLists
-                .Where(w => w.UserName.Equals(userName) && orderItems.Any(o => w.ProductId == o.ProductId))
-                .ExecuteDelete();
-            return context.SaveChanges() >= orderItems.Count();
+            bool result = false;
+            try
+            {
+                context.WishLists
+                    .Where(w => w.UserName.Equals(userName) && orderItems.Any(o => w.ProductId == o.ProductId))
+                    .ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+            return result;
         }
     }
 }

@@ -179,7 +179,7 @@ namespace ToyNJoy.API.Controllers
             FormFileCollection formFiles = (FormFileCollection)keyValuePairs.Files;
             foreach (IFormFile file in formFiles)
             {
-                user.VirtualImage = BaseUtiliy.SaveImage(user.Username + "_virtual_", "user", file);
+                user.VirtualImage = BaseUtiliy.SaveFile(user.Username + "_virtual_", "/Image/user", file);
             }
 
             return bll.upd(user);

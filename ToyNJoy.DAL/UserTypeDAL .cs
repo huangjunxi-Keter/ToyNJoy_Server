@@ -52,8 +52,18 @@ namespace ToyNJoy.DAL
 
         public bool del(int id)
         {
-            context.UserTypes.Where(x => x.Id == id).ExecuteDelete();
-            return context.SaveChanges() > 0;
+            bool result = false;
+            try
+            {
+                context.UserTypes.Where(x => x.Id == id).ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
         }
     }
 }

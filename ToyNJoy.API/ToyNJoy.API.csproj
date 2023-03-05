@@ -23,4 +23,10 @@
     <ProjectReference Include="..\ToyNJoy.Utiliy\ToyNJoy.Utiliy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Image\news\cover\" />
+    <Folder Include="Image\news\content\" />
+    <Folder Include="Video\news\" />
+  </ItemGroup>
+
 </Project>

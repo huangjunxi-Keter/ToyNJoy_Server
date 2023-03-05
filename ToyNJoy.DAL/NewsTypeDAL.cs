@@ -53,8 +53,19 @@ namespace ToyNJoy.DAL
 
         public bool del(int id)
         {
-            context.NewsTypes.Where(n => n.Id == id).ExecuteDelete();
-            return context.SaveChanges() > 0;
+            bool result = false;
+            try
+            {
+                context.NewsTypes.Where(n => n.Id == id).ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return result;
         }
     }
 }

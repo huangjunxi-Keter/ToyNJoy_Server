@@ -64,12 +64,12 @@ namespace ToyNJoy.API.Controllers
             {
                 Product product = bll.getById(Convert.ToInt32(file.Name));
                 string oldImage = product.Image;
-                product.Image = BaseUtiliy.SaveImage(file.Name, "products", file);
+                product.Image = BaseUtiliy.SaveFile(file.Name, "/Image/products", file);
                 if (bll.upd(product))
                 {
                     if (oldImage != ".png") 
                     {
-                        BaseUtiliy.DeleteImage("products", oldImage);
+                        BaseUtiliy.DeleteFile("/Image/products", oldImage);
                     }
                     result = product.Image;
                 }

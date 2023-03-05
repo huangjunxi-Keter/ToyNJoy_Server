@@ -18,19 +18,26 @@ namespace ToyNJoy.DAL
         /// </summary>
         /// <param name="title">标题</param>
         /// <param name="text">内容</param>
+        /// <param name="date">更新日期</param>
         /// <param name="productId">产品id</param>
         /// <param name="typeId">类型id</param>
         /// <param name="orderby">排序方式</param>
         /// <param name="page">当前页减一</param>
         /// <param name="count">总条数</param>
         /// <returns></returns>
-        public IEnumerable<News> find(string? title, string? text, int? productId, int? typeId, string? orderby, int? page, int? count) 
+        public IEnumerable<News> find(string? title, string? text, DateTime? date, int? productId, int? typeId, string? orderby, int? page, int? count) 
         {
             IQueryable<News> result = context.News;
             if (productId != null)
                 result = result.Where(x => x.ProductId.Equals(productId));
             if (typeId != null)
                 result = result.Where(x => x.TypeId == typeId);
+            if (date != null)
+            {
+                DateTime min = date.Value.AddDays(-1);
+                DateTime max = date.Value.AddDays(1);
+                result = result.Where(n => n.UpdateTime > min && n.UpdateTime < max);
+            }
             if (!string.IsNullOrEmpty(title))
                 result = result.Where(x => x.Title.Contains(title));
             if (!string.IsNullOrEmpty(text))
@@ -70,13 +77,19 @@ namespace ToyNJoy.DAL
         /// <param name="text">内容</param>
         /// <param name="productId">产品id</param>
         /// <param name="typeId">类型id</param>
-        public int findCount(string? title, string? text, int? productId, int? typeId)
+        public int findCount(string? title, string? text, DateTime? date, int? productId, int? typeId)
         {
             IQueryable<News> news = context.News;
             if (productId != null)
                 news = news.Where(x => x.ProductId.Equals(productId));
             if (typeId != null)
                 news = news.Where(x => x.TypeId == typeId);
+            if (date != null)
+            {
+                DateTime min = date.Value.AddDays(-1);
+                DateTime max = date.Value.AddDays(1);
+                news = news.Where(n => n.UpdateTime > min && n.UpdateTime < max);
+            }
             if (!string.IsNullOrEmpty(title))
                 news = news.Where(x => x.Title.Contains(title));
             if (!string.IsNullOrEmpty(text))
@@ -86,14 +99,31 @@ namespace ToyNJoy.DAL
         }
 
         /// <summary>
+        /// 获取实体
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        public News get(int id)
+        {
+            return context.News.Find(id);
+        }
+
+        /// <summary>
         /// 新增
         /// </summary>
         /// <param name="news">新闻实体</param>
         /// <returns></returns>
-        public bool add(News news)
+        public News add(News news)
         {
+            News result = null;
             context.Add(news);
-            return context.SaveChanges() > 0;
+            context.SaveChanges();
+            context.Entry(news);
+            if (news.Id != null) 
+            {
+                result = news;
+            }
+            return result;
         }
 
         /// <summary>
@@ -114,8 +144,18 @@ namespace ToyNJoy.DAL
         /// <returns></returns>
         public bool del(int id)
         {
-            context.News.Where(n => n.Id == id).ExecuteDelete();
-            return context.SaveChanges() > 0;
+            bool result = false;
+            try
+            {
+                context.News.Where(n => n.Id == id).ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
         }
     }
 }

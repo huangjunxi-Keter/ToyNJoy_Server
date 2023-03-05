@@ -39,10 +39,22 @@ namespace ToyNJoy.DAL
 
         public bool del(int? id)
         {
-            if (id != null)
-                context.ShoppingCars.Where(s => s.Id == id).ExecuteDelete();
+            bool result = false;
+            try
+            {
+                if (id != null)
+                {
+                    context.ShoppingCars.Where(s => s.Id == id).ExecuteDelete();
+                    context?.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
-            return context?.SaveChanges() > 0;
+            return result;
         }
     }
 }

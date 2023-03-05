@@ -52,8 +52,19 @@ namespace ToyNJoy.DAL
 
         public bool del(int id)
         {
-            context.ProductTypes.Where(x => x.Id == id).ExecuteDelete();
-            return context.SaveChanges() > 0;
+            bool result = false;
+            try
+            {
+                context.ProductTypes.Where(x => x.Id == id).ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
+            return result;
         }
     }
 }

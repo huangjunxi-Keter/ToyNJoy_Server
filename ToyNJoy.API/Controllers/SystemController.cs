@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToyNJoy.Utiliy;
 
@@ -42,6 +43,13 @@ namespace ToyNJoy.API.Controllers
         public bool SendEmail(string email, string title, string message)
         {
             return EmailHelper.SendMail(email, title, message);
+        }
+
+        [HttpGet("deleteFile")]
+        [Authorize]
+        public void deleteFile(string path, string fileName)
+        {
+            BaseUtiliy.DeleteFile(path, fileName);
         }
     }
 }

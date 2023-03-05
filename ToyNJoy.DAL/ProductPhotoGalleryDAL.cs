@@ -26,8 +26,20 @@ namespace ToyNJoy.DAL
 
         public bool del(int productId, string image)
         {
-            context.ProductPhotoGalleries.Where(p => p.ProductId == productId && p.Image == image).ExecuteDelete();
-            return context.SaveChanges() > 0;
+            bool result = false;
+            try
+            {
+                context.ProductPhotoGalleries.Where(p => p.ProductId == productId && p.Image == image).ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return result;
         }
     }
 }
