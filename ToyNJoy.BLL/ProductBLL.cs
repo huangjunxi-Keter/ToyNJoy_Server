@@ -24,9 +24,6 @@ namespace ToyNJoy.BLL
 
         public Product add(Product p)
         {
-            p.Image = ".png";
-            p.Browse = 0;
-            p.Purchases = 0;
             p.Discount /= 10;
             Product result = null;
 
@@ -52,28 +49,35 @@ namespace ToyNJoy.BLL
             return result;
         }
 
-        public bool upd(Product p)
+        public bool upd(Product newData)
         {
             bool result = false;
-            if (p != null && p.Id != null)
+            if (newData != null && newData.Id != null)
             {
-                var product = productDAL.getById(p.Id.Value);
+                Product product = productDAL.getById(newData.Id.Value);
 
-                bool cutPrice = product.Price > p.Price;
-                bool discount = p.Discount < 10;
+                bool cutPrice = product.Price > newData.Price;
+                bool discount = newData.Discount < 10;
 
-                product.Name = p.Name;
-                product.TypeId = p.TypeId;
-                product.AgeGrading = p.AgeGrading;
-                product.Price = p.Price;
-                product.Discount = p.Discount / 10;
-                product.Intro = p.Intro;
-                product.Developers = p.Developers;
-                product.Publisher = p.Publisher;
-                product.ReleaseDate = p.ReleaseDate;
+                product.TypeId = newData.TypeId;
+                product.Name = newData.Name;
+                product.Image = newData.Image;
+                product.Price = newData.Price;
+                product.Intro = newData.Intro;
+                product.AgeGrading = newData.AgeGrading;
+                product.Developers = newData.Developers;
+                product.Publisher = newData.Publisher;
+                product.ReleaseDate = newData.ReleaseDate;
+                product.Browse = newData.Browse;
+                product.Purchases = newData.Purchases;
+                if (newData.Discount > 1)
+                    product.Discount = newData.Discount / 10;
+                else
+                    product.Discount = newData.Discount;
+                product.State = newData.State;
+                product.FileName = newData.FileName;
 
                 result = productDAL.upd(product);
-
                 if (result && (cutPrice || discount))
                 {
                     List<string> usernameList = new List<string>();
@@ -97,14 +101,14 @@ namespace ToyNJoy.BLL
         }
 
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
-            int? typeId, string? orderby, int? page, int? count)
+            int? typeId, int? state, string? orderby, int? page, int? count)
         {
-            return productDAL.find(name, maxPrice, minPrice, typeId, orderby, page, count);
+            return productDAL.find(name, maxPrice, minPrice, typeId, state, orderby, page, count);
         }
 
-        public int findCount(string? name, int? maxPrice, int? minPrice, int? typeId)
+        public int findCount(string? name, int? maxPrice, int? minPrice, int? typeId, int? state)
         {
-            return productDAL.findCount(name, maxPrice, minPrice, typeId);
+            return productDAL.findCount(name, maxPrice, minPrice, typeId, state);
         }
     }
 }

@@ -70,6 +70,16 @@ public partial class Product
     /// </summary>
     public double? Discount { get; set; }
 
+    /// <summary>
+    /// 状态：0禁用 1启用
+    /// </summary>
+    public int? State { get; set; }
+
+    /// <summary>
+    /// 文件名
+    /// </summary>
+    public string? FileName { get; set; }
+
     // public virtual ICollection<Library> Libraries { get; } = new List<Library>();
 
     // public virtual ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();

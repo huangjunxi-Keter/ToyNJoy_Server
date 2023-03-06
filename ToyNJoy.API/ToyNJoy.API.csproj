@@ -27,6 +27,7 @@
     <Folder Include="Image\news\cover\" />
     <Folder Include="Image\news\content\" />
     <Folder Include="Video\news\" />
+    <Folder Include="Games\" />
   </ItemGroup>
 
 </Project>

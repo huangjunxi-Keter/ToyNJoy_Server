@@ -39,7 +39,7 @@ namespace ToyNJoy.DAL
         }
 
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
-            int? typeId, string? orderby, int? page, int? count)
+            int? typeId, int? state, string? orderby, int? page, int? count)
         {
             IEnumerable<Product> result = context.Products;
             if (!string.IsNullOrEmpty(name))
@@ -50,6 +50,8 @@ namespace ToyNJoy.DAL
                 result = result.Where(x => x.Price >= minPrice);
             if (typeId != null)
                 result = result.Where(x => x.TypeId == typeId);
+            if (state != null)
+                result = result.Where(x => x.State == state);
             // 条件筛选完后再进行排序和分页
             if (!string.IsNullOrEmpty(orderby))
             {
@@ -82,7 +84,7 @@ namespace ToyNJoy.DAL
             return result;
         }
 
-        public int findCount(string? name, int? maxPrice, int? minPrice, int? typeId)
+        public int findCount(string? name, int? maxPrice, int? minPrice, int? typeId, int? state)
         {
             IQueryable<Product> result = context.Products;
             if (!string.IsNullOrEmpty(name))
@@ -93,6 +95,8 @@ namespace ToyNJoy.DAL
                 result = result.Where(x => x.Price >= minPrice);
             if (typeId != null)
                 result = result.Where(x => x.TypeId == typeId);
+            if (state != null)
+                result = result.Where(x => x.State == state);
             return result.Count();
         }
     }

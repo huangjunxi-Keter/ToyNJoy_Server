@@ -391,6 +391,12 @@ public partial class ToyNjoyContext : DbContext
             entity.Property(e => e.TypeId)
                 .HasComment("类型id")
                 .HasColumnName("type_id");
+            entity.Property(e => e.State)
+                .HasComment("状态：0禁用 1启用")
+                .HasColumnName("state");
+            entity.Property(e => e.FileName)
+                .HasComment("文件名")
+                .HasColumnName("file_name");
 
             //entity.HasOne(d => d.Type).WithMany(p => p.Products)
             //    .HasForeignKey(d => d.TypeId)
