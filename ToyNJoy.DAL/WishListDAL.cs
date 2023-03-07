@@ -72,6 +72,29 @@ namespace ToyNJoy.DAL
             return result;
         }
 
+        public bool add(WishList wishList)
+        { 
+            context.Add(wishList);
+            return context.SaveChanges() > 0;
+        }
+
+        public bool del(int id)
+        {
+            bool result = false;
+            try
+            {
+                context.WishLists.Where(w => w.Id == id).ExecuteDelete();
+                context.SaveChanges();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return result;
+        }
+
         public bool del(string userName, IEnumerable<OrderItem> orderItems)
         {
             bool result = false;

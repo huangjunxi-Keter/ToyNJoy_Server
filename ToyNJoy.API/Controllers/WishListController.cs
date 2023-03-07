@@ -29,5 +29,20 @@ namespace ToyNJoy.API.Controllers
             User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
             return bll.find(loginUser.Username, orderby, name, productId, typeId, minPrice, maxPrice);
         }
+
+        [HttpGet("add")]
+        [Authorize]
+        public bool add(int productId)
+        {
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
+            return bll.add(loginUser.Username, productId);
+        }
+
+        [HttpGet("del")]
+        [Authorize]
+        public bool del(int id)
+        {
+            return bll.del(id);
+        }
     }
 }
