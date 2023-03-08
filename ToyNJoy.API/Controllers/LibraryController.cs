@@ -24,10 +24,11 @@ namespace ToyNJoy.API.Controllers
 
         [HttpGet("find")]
         [Authorize]
-        public IEnumerable<Library> find(string? name, int? productId, int? typeId, double? beginDays, double? endDays, string? orderby) 
+        public IEnumerable<Library> find(string? name, int? productId, int? typeId, double? beginDays, 
+            double? endDays, string? orderby, int? page, int? count) 
         {
             User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
-            return bll.find(loginUser.Username, name, productId, typeId, beginDays, endDays, orderby);
+            return bll.find(loginUser.Username, name, productId, typeId, beginDays, endDays, orderby, page, count);
         }
 
         [HttpPost("add")]

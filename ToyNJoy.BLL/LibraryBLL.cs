@@ -25,10 +25,10 @@ namespace ToyNJoy.BLL
             wishListDAL = new WishListDAL(context);
         }
 
-        public IEnumerable<Library> find(string? userName, string productName, int? productId,
-            int? productTypeId, double? beginDays, double? endDays, string? orderby)
+        public IEnumerable<Library> find(string? userName, string productName, int? productId, int? productTypeId, 
+            double? beginDays, double? endDays, string? orderby, int? page, int? count)
         {
-            return libraryDAL.find(userName, productName, productId, productTypeId, beginDays, endDays, orderby);
+            return libraryDAL.find(userName, productName, productId, productTypeId, beginDays, endDays, orderby, page, count);
         }
 
         public bool add(Alipay alipay, string userName)

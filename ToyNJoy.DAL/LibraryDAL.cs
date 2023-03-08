@@ -13,8 +13,8 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public IEnumerable<Library> find(string? userName, string productName, int? productId, 
-            int? productTypeId, double? beginDays, double? endDays, string? orderby)
+        public IEnumerable<Library> find(string? userName, string productName, int? productId, int? productTypeId, 
+            double? beginDays, double? endDays, string? orderby, int? page, int? count)
         {
             IQueryable<Library> result = context.Libraries;
             if (!string.IsNullOrEmpty(userName))
@@ -53,6 +53,11 @@ namespace ToyNJoy.DAL
                         break;
                 }
             }
+            if (page != null && count != null)
+                result = result.Skip((page * count).Value);
+            if (count != null)
+                result = result.Take(count.Value);
+
             return result.Include(x => x.Product);
         }
 
