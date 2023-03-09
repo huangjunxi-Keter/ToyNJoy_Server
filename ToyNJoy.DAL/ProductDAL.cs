@@ -13,31 +13,6 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public Product add(Product p)
-        {
-            Product result = null;
-            context.Add(p);
-            context.SaveChanges();
-            // 将添加后的数据补充到实体（id）
-            context.Entry(p);
-            if (p.Id != null)
-            {
-                result = p;
-            }
-            return result;
-        }
-
-        public bool upd(Product p)
-        {
-            context.Update(p);
-            return context.SaveChanges() > 0;
-        }
-
-        public Product getById(int id)
-        {
-            return context.Find<Product>(id);
-        }
-
         public IEnumerable<Product> find(string? name, int? maxPrice, int? minPrice,
             int? typeId, int? state, string? orderby, int? page, int? count)
         {
@@ -98,6 +73,31 @@ namespace ToyNJoy.DAL
             if (state != null)
                 result = result.Where(x => x.State == state);
             return result.Count();
+        }
+
+        public Product getById(int id)
+        {
+            return context.Find<Product>(id);
+        }
+
+        public Product add(Product p)
+        {
+            Product result = null;
+            context.Add(p);
+            context.SaveChanges();
+            // 将添加后的数据补充到实体（id）
+            context.Entry(p);
+            if (p.Id != null)
+            {
+                result = p;
+            }
+            return result;
+        }
+
+        public bool upd(Product p)
+        {
+            context.Update(p);
+            return context.SaveChanges() > 0;
         }
     }
 }

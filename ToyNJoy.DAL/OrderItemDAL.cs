@@ -13,11 +13,15 @@ namespace ToyNJoy.DAL
             this.context = context;
         }
 
-        public IEnumerable<OrderItem> find(string? orderId, bool? hasProduct = false)
+        public IEnumerable<OrderItem> find(string? orderId, int? productId = null, string? username = null, bool? hasProduct = null)
         {
             IQueryable<OrderItem> result = context.OrderItems;
             if (!string.IsNullOrEmpty(orderId))
                 result = result.Where(x => x.OrderId == orderId);
+            if (productId != null)
+                result = result.Where(x => x.ProductId == productId);
+            if (!string.IsNullOrEmpty(username))
+                result = result.Where(o => o.Order.Username.Equals(username));
             if (hasProduct != null && hasProduct.Value)
                 result = result.Include(o => o.Product);
             return result;

@@ -51,5 +51,28 @@ namespace ToyNJoy.API.Controllers
         {
             BaseUtiliy.DeleteFile(path, fileName);
         }
+
+        [HttpGet("download")]
+        [Authorize]
+        public IActionResult download(string path, string fileName)
+        {
+            try
+            {
+                //文件物理路径
+                string filePath = AppContext.BaseDirectory.Split("\\bin\\")[0] + path + "/" + fileName;
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return new EmptyResult();
+                }
+                //异步读取文件
+                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite, 4096, true);
+                //为true时，支持断点续传
+                return File(fileStream, "application/octet-stream", fileName, true);
+            }
+            catch (Exception ex)
+            {
+                return new EmptyResult();
+            }
+        }
     }
 }

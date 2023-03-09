@@ -11,8 +11,8 @@ namespace ToyNJoy.BLL
         private LibraryDAL libraryDAL;
         private OrderItemDAL orderItemDAL;
         private OrderDAL orderDAL;
-        private ShoppingCarDAL shoppingCarDAL;
         private WishListDAL wishListDAL;
+        private ProductDAL productDAL;
         private ToyNjoyContext context;
 
         public LibraryBLL(ToyNjoyContext context)
@@ -21,7 +21,7 @@ namespace ToyNJoy.BLL
             libraryDAL = new LibraryDAL(context);
             orderItemDAL = new OrderItemDAL(context);
             orderDAL = new OrderDAL(context);
-            shoppingCarDAL = new ShoppingCarDAL(context);
+            productDAL = new ProductDAL(context);
             wishListDAL = new WishListDAL(context);
         }
 
@@ -29,6 +29,12 @@ namespace ToyNJoy.BLL
             double? beginDays, double? endDays, string? orderby, int? page, int? count)
         {
             return libraryDAL.find(userName, productName, productId, productTypeId, beginDays, endDays, orderby, page, count);
+        }
+
+        public int findCount(string? userName, string productName, int? productId, int? productTypeId,
+            double? beginDays, double? endDays)
+        {
+            return libraryDAL.findCount(userName, productName, productId, productTypeId, beginDays, endDays);
         }
 
         public bool add(Alipay alipay, string userName)
@@ -58,8 +64,13 @@ namespace ToyNJoy.BLL
                 {
                     libraryDAL.add(libraries);
                     orderDAL.upd(order);
-                    shoppingCarDAL.del(userName);
                     wishListDAL.del(userName, orderItems);
+                    foreach (OrderItem item in orderItems)
+                    {
+                        Product product = productDAL.getById(item.ProductId);
+                        product.Purchases += 1;
+                        productDAL.upd(product);
+                    }
                     dbContextTransaction.Commit();
 
                     result = true;

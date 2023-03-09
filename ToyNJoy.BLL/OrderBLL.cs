@@ -72,6 +72,8 @@ namespace ToyNJoy.BLL
         /// <returns></returns>
         public string add(string username)
         {
+            string result = "";
+
             IEnumerable<ShoppingCar> shoppingCar = shoppingCarDAL.find(username, null);
 
             Order order = new Order();
@@ -98,9 +100,18 @@ namespace ToyNJoy.BLL
                 try
                 {
                     // 创建支付宝订单，获取跳转支付页面的表单
-                    order.AlipayForm = new AlipayHelper().getPayForm(order.Id, "ToyNJoy", order.TotalAmount.Value.ToString("f2"), "测试");
+                    if (order.TotalAmount > 0)
+                    {
+                        order.AlipayForm = new AlipayHelper().getPayForm(order.Id, "ToyNJoy", order.TotalAmount.Value.ToString("f2"), "测试");
+                        result = order.AlipayForm;
+                    }
+                    else 
+                    {
+                        result = "oid" + order.Id;
+                    }
                     orderDAL.add(order);
                     orderItemDAL.add(orderItems);
+                    shoppingCarDAL.del(username);
 
                     dbContextTransaction.Commit();
                 }
@@ -109,7 +120,7 @@ namespace ToyNJoy.BLL
                     dbContextTransaction.Rollback();
                 }
             }
-            return order.AlipayForm;
+            return result;
         }
 
         /// <summary>
@@ -128,9 +139,9 @@ namespace ToyNJoy.BLL
         /// <param name="orderId">订单号</param>
         /// <param name="hasProduct">是否带商品信息</param>
         /// <returns></returns>
-        public IEnumerable<OrderItem> findItems(string? orderId, bool? hasProduct)
+        public IEnumerable<OrderItem> findItems(string? orderId, int? productId, string? username, bool? hasProduct)
         {
-            return orderItemDAL.find(orderId, hasProduct);
+            return orderItemDAL.find(orderId, productId, username, hasProduct);
         } 
     }
 }

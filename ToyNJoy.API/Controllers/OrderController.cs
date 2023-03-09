@@ -92,9 +92,10 @@ namespace ToyNJoy.API.Controllers
         /// <returns></returns>
         [HttpGet("findItems")]
         [Authorize]
-        public IEnumerable<OrderItem> findItems(string? orderId, bool? hasProduct)
+        public IEnumerable<OrderItem> findItems(string? orderId, int? productId, bool? hasProduct)
         {
-            return bll.findItems(orderId, hasProduct);
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
+            return bll.findItems(orderId, productId, loginUser.Username, hasProduct);
         }
     }
 }

@@ -59,6 +59,10 @@ namespace ToyNJoy.API.Controllers
             {
                 result = Ok(new ResponseModel { Code = 0, Message = "账号或密码错误" });
             }
+            else if (userData.State == 0)
+            {
+                result = Ok(new ResponseModel { Code = 0, Message = "账号被封禁" });
+            }
             else
             {
                 var token = tokenHelper.CreateJwtToken(userData);

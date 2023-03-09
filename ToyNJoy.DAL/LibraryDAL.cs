@@ -61,6 +61,32 @@ namespace ToyNJoy.DAL
             return result.Include(x => x.Product);
         }
 
+        public int findCount(string? userName, string productName, int? productId, int? productTypeId,
+            double? beginDays, double? endDays)
+        {
+            IQueryable<Library> result = context.Libraries;
+            if (!string.IsNullOrEmpty(userName))
+                result = result.Where(x => x.UserName.Equals(userName));
+            if (!string.IsNullOrEmpty(productName))
+                result = result.Where(x => x.Product.Name.Contains(productName));
+            if (productId != null)
+                result = result.Where(x => x.Product.Id == productId);
+            if (productTypeId != null)
+                result = result.Where(x => x.Product.TypeId == productTypeId);
+            if (beginDays != null)
+            {
+                DateTime beginDate = DateTime.Now.AddDays(beginDays.Value);
+                result = result.Where(x => x.LastTime > beginDate);
+            }
+            if (endDays != null)
+            {
+                DateTime endDate = DateTime.Now.AddDays(endDays.Value);
+                result = result.Where(x => x.LastTime < endDate);
+            }
+
+            return result.Count();
+        }
+
         public IEnumerable<Library> find(string username)
         {
             return context.Libraries.Where(l => l.UserName.Equals(username)).Include(x => x.Product);

@@ -31,6 +31,14 @@ namespace ToyNJoy.API.Controllers
             return bll.find(loginUser.Username, name, productId, typeId, beginDays, endDays, orderby, page, count);
         }
 
+        [HttpGet("findCount")]
+        [Authorize]
+        public int findCount(string? name, int? productId, int? typeId, double? beginDays, double? endDays)
+        {
+            User loginUser = BaseUtiliy.getTokenData<User>(Request, tokenHelper);
+            return bll.findCount(loginUser.Username, name, productId, typeId, beginDays, endDays);
+        }
+
         [HttpPost("add")]
         [Authorize]
         public bool add([FromBody] Alipay alipay)
